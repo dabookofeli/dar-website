@@ -1,0 +1,362 @@
+<!-- FILE: principles.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Principles · Digital Action Receipts</title>
+  <meta name="description" content="Core principles, invariants, and non-goals for Digital Action Receipts (DAR): neutrality, append-only evidence, and clear responsibility boundaries." />
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root{
+      --bg:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0; --card:#f8fafc; --accent:#1d4ed8;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
+      backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+    .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+    .brand strong{font-weight:650;letter-spacing:-.02em}
+    .brand small{color:var(--muted);font-family:var(--mono);font-size:12px}
+    nav ul{list-style:none;margin:0;padding:0;display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+    nav a{display:inline-block;padding:8px 10px;border-radius:10px;color:var(--text)}
+    nav a:hover{background:var(--card);text-decoration:none}
+    nav a[aria-current="page"]{background:var(--card);border:1px solid var(--line)}
+    main{padding:42px 0 56px}
+    .hero{padding:10px 0 20px;border-bottom:1px solid var(--line)}
+    .kicker{font-family:var(--mono);font-size:12px;color:var(--muted);
+      letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px}
+    h1{margin:0 0 12px;font-size:40px;letter-spacing:-.03em;line-height:1.08}
+    .subhead{margin:0;color:var(--muted);font-size:18px;max-width:90ch}
+    .note{
+      margin-top:18px;padding:14px 16px;border:1px solid var(--line);
+      border-radius:var(--radius);background:var(--card);color:var(--muted);max-width:95ch
+    }
+    .toc{
+      margin-top:18px;padding:14px 16px;border:1px solid var(--line);
+      border-radius:var(--radius);background:#fff
+    }
+    .toc h2{margin:0 0 8px;font-size:15px;letter-spacing:-.01em}
+    .toc ul{margin:0;padding-left:18px;color:var(--muted)}
+    .toc a{font-family:var(--mono);font-size:12px}
+
+    .section{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+    .section h2{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
+    .section p{margin:0;color:var(--muted);max-width:95ch}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:16px}
+    .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:16px}
+    .card h3{margin:0 0 10px;letter-spacing:-.02em}
+    .card p{margin:0;color:var(--muted)}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:900px){.span-6{grid-column:span 12}}
+    .rule{
+      margin-top:12px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);
+      background:#fff
+    }
+    .rule strong{display:block;letter-spacing:-.01em}
+    .rule p{margin:6px 0 0;color:var(--muted)}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .pill{font-family:var(--mono);font-size:12px;color:var(--muted);
+      border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:999px}
+    .code{
+      margin-top:12px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);
+      background:#fff;font-family:var(--mono);font-size:13px;overflow:auto;white-space:pre
+    }
+    footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:13px}
+    footer .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    footer a{color:var(--muted)}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <strong>Digital Action Receipts</strong>
+        <small>DAR</small>
+      </div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="definition.html">Definition</a></li>
+          <li><a href="action-domains.html">Action Domains</a></li>
+          <li><a href="integration.html">Integration</a></li>
+          <li><a href="principles.html" aria-current="page">Principles</a></li>
+          <li><a href="docs.html">Docs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="content">
+  <div class="wrap">
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="title">
+      <p class="kicker">Core principles</p>
+      <h1 id="title">Principles, invariants, and non-goals</h1>
+      <p class="subhead">
+        DAR is intentionally narrow: preserve durable evidence at the boundary of digital action.
+        This page states the invariants that must hold for DAR to remain neutral infrastructure.
+      </p>
+
+      <div class="note">
+        <div class="pillrow" aria-hidden="true">
+          <span class="pill">neutral</span>
+          <span class="pill">append-only</span>
+          <span class="pill">tamper-evident</span>
+          <span class="pill">execution-time</span>
+          <span class="pill">facts-not-interpretations</span>
+        </div>
+      </div>
+
+      <div class="toc" aria-label="On this page">
+        <h2>On this page</h2>
+        <ul>
+          <li><a href="#invariants">Invariants</a></li>
+          <li><a href="#non-goals">Non-goals</a></li>
+          <li><a href="#boundaries">Responsibility boundaries</a></li>
+          <li><a href="#security">Security considerations</a></li>
+          <li><a href="#extensibility">Extensibility model</a></li>
+          <li><a href="#terms">Terms & normative language</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- INVARIANTS -->
+    <section class="section" id="invariants" aria-labelledby="h-inv">
+      <h2 id="h-inv">Invariants</h2>
+      <p>
+        The following properties are non-negotiable. If these are weakened, DAR collapses into monitoring,
+        a compliance product, or an opinionated platform — and loses neutrality.
+      </p>
+
+      <div class="grid" aria-label="Invariants list">
+        <div class="card span-6">
+          <h3>Invariant 1 — Execution-time issuance</h3>
+          <p>Receipts are issued at the point an action is executed (or a decision is committed), not after analysis.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Invariant 2 — Append-only history</h3>
+          <p>Receipts are never edited or deleted. Corrections and remediation produce new receipts.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Invariant 3 — Tamper-evidence & verifiability</h3>
+          <p>Any alteration of a receipt, its signature, or its ordering must be detectable through verification.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Invariant 4 — Minimal, portable semantics</h3>
+          <p>Receipts contain the minimum facts required to attest the action. Domain meaning remains external.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Invariant 5 — Neutrality by design</h3>
+          <p>DAR preserves facts. It does not interpret correctness, intent, risk, or compliance.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Invariant 6 — Evidence by reference</h3>
+          <p>Receipts are shareable as references. Consumers can verify without tight coupling or shared databases.</p>
+        </div>
+      </div>
+
+      <div class="rule" style="margin-top:16px">
+        <strong>Practical test</strong>
+        <p>
+          If a feature requires DAR to “decide,” “flag,” “score,” “monitor,” or “alert,” it is likely outside scope.
+          If a feature preserves a verifiable fact at execution time, it is likely in scope.
+        </p>
+      </div>
+    </section>
+
+    <!-- NON-GOALS -->
+    <section class="section" id="non-goals" aria-labelledby="h-ng">
+      <h2 id="h-ng">Non-goals</h2>
+      <p>
+        These non-goals protect DAR’s neutrality and reduce liability. They are intentional exclusions, not missing features.
+      </p>
+
+      <div class="grid" aria-label="Non-goals list">
+        <div class="card span-6">
+          <h3>No monitoring or surveillance</h3>
+          <p>DAR is not a telemetry platform. It does not continuously observe behavior or infer intent.</p>
+        </div>
+        <div class="card span-6">
+          <h3>No compliance determinations</h3>
+          <p>DAR does not declare compliance or non-compliance. It provides evidence that others may evaluate.</p>
+        </div>
+        <div class="card span-6">
+          <h3>No risk scoring or fraud detection</h3>
+          <p>DAR does not score users, sessions, or actions. Any scoring is downstream and external.</p>
+        </div>
+        <div class="card span-6">
+          <h3>No “truth arbitration”</h3>
+          <p>DAR does not adjudicate disputes. It offers verifiable records to anchor adjudication.</p>
+        </div>
+        <div class="card span-6">
+          <h3>No log replacement mandate</h3>
+          <p>DAR complements existing logs; it does not require replacing observability stacks or SIEM systems.</p>
+        </div>
+        <div class="card span-6">
+          <h3>No business-rule enforcement</h3>
+          <p>DAR can reference policies/guardrails, but does not enforce them. Enforcement is external.</p>
+        </div>
+      </div>
+
+      <div class="rule" style="margin-top:16px">
+        <strong>Why non-goals matter</strong>
+        <p>
+          Systems that interpret, flag, or enforce become accountable for outcomes. DAR’s purpose is to remain
+          a neutral evidence layer: durable facts at the action boundary, usable across domains and regimes.
+        </p>
+      </div>
+    </section>
+
+    <!-- RESPONSIBILITY BOUNDARIES -->
+    <section class="section" id="boundaries" aria-labelledby="h-b">
+      <h2 id="h-b">Responsibility boundaries</h2>
+      <p>
+        DAR’s boundary is the issuance and verification of receipts. This section clarifies what DAR is responsible for
+        versus what remains external.
+      </p>
+
+      <div class="grid" aria-label="Boundaries">
+        <div class="card span-6">
+          <h3>DAR is responsible for</h3>
+          <p>
+            Issuing receipts at execution time; preserving append-only history; enabling verification; providing query-by-reference;
+            ensuring tamper-evidence for stored receipts (within the system’s integrity guarantees).
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>DAR is not responsible for</h3>
+          <p>
+            Determining correctness; detecting fraud; enforcing policies; validating business intent; proving identity beyond stated references;
+            resolving disputes; or ensuring a customer’s systems generate semantically accurate events.
+          </p>
+        </div>
+      </div>
+
+      <div class="rule" style="margin-top:16px">
+        <strong>Vendor boundary posture (recommended)</strong>
+        <p>
+          “We provide verifiable receipts of the actions executed by configured systems at time T. We do not interpret intent,
+          determine compliance, or adjudicate disputes.”
+        </p>
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="section" id="security" aria-labelledby="h-sec">
+      <h2 id="h-sec">Security considerations</h2>
+      <p>
+        DAR’s integrity depends on issuance, storage, and verification controls. Security guidance here is intentionally high-level
+        and implementation-agnostic.
+      </p>
+
+      <div class="grid" aria-label="Security list">
+        <div class="card span-6">
+          <h3>Key management</h3>
+          <p>Receipt integrity mechanisms depend on key custody. Rotation should produce verifiable continuity, not history loss.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Least-privilege issuance</h3>
+          <p>Only authorized issuers should be able to issue or append receipts for a given namespace or tenant.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Redaction avoidance</h3>
+          <p>Prefer references and hashes over raw sensitive content. Receipts should minimize privacy and disclosure risk.</p>
+        </div>
+        <div class="card span-6">
+          <h3>Verification independence</h3>
+          <p>Verification should be possible without trusting a single vendor narrative. “Verify, don’t assume.”</p>
+        </div>
+      </div>
+
+      <div class="rule" style="margin-top:16px">
+        <strong>Privacy posture</strong>
+        <p>
+          Receipts should be designed as evidence primitives, not data lakes. Prefer stable references, coarse context tags,
+          and optional hashed fields over sensitive payload storage.
+        </p>
+      </div>
+    </section>
+
+    <!-- EXTENSIBILITY -->
+    <section class="section" id="extensibility" aria-labelledby="h-ext">
+      <h2 id="h-ext">Extensibility model</h2>
+      <p>
+        DAR is a core primitive. Higher-level expressions (profiles, packages, or domain-specific conventions) should layer on top,
+        without changing the core invariants.
+      </p>
+
+      <div class="grid" aria-label="Extensibility model">
+        <div class="card span-6">
+          <h3>Profiles (recommended)</h3>
+          <p>
+            Domain conventions that reuse DAR unchanged (e.g., Agent Action Receipts / AAR, workflow approvals, security boundary receipts).
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Packages (optional)</h3>
+          <p>
+            Bundles that assemble receipts into exportable artifacts (e.g., audit packets) without turning DAR into a dashboard.
+          </p>
+        </div>
+      </div>
+
+      <div class="code" aria-label="Layering model">
+Layer 1 — DAR Core
+  issue · verify · query-by-reference · append-only guarantees
+
+Layer 2 — Profiles (no new primitives)
+  AAR (agent actions) · workflow approvals · access/control decisions
+
+Layer 3 — Packages (optional, premium)
+  Evidence packets · export bundles · domain-specific reporting artifacts
+      </div>
+    </section>
+
+    <!-- TERMS / NORMATIVE -->
+    <section class="section" id="terms" aria-labelledby="h-terms">
+      <h2 id="h-terms">Terms & normative language</h2>
+      <p>
+        This document uses “MUST / SHOULD / MAY” in the standards sense: MUST indicates a required property for DAR invariants;
+        SHOULD indicates a recommended default for neutrality; MAY indicates optional extensions.
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div><strong style="color:var(--text)">© Digital Action Receipts</strong></div>
+        <div style="margin-top:6px">Neutral, verifiable receipts for digital actions.</div>
+        <div style="margin-top:10px"> <span id="y"></span> EF DigitalSol </div>
+      </div>
+      <div>
+        <div><a href="definition.html">Definition</a></div>
+        <div><a href="action-domains.html">Action Domains</a></div>
+        <div><a href="integration.html">Integration</a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
+```0
