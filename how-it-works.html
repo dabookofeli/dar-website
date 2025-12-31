@@ -137,6 +137,31 @@
       font-family:var(--mono);
       font-size:12.5px;
       white-space:pre;
+      line-height:1.35;
+      letter-spacing:0.1px;
+    }
+
+    /* Calm diagram blocks (text-like, but visually pleasing) */
+    .flow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .flow .node{
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      padding:10px 12px;
+      font-size:13px;
+      color:var(--nav);
+      white-space:nowrap;
+    }
+    .flow .arrow{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1;
     }
 
     .grid{
@@ -171,6 +196,12 @@
     @media (max-width:860px){
       h1{font-size:34px}
       .how,.grid{grid-template-columns:1fr}
+    }
+    /* Mobile polish: make diagram + code blocks slightly smaller */
+    @media (max-width:420px){
+      pre{font-size:11.5px}
+      .flow .node{font-size:12.5px; padding:9px 10px}
+      .flow{gap:8px}
     }
   </style>
 </head>
@@ -240,7 +271,7 @@
 
       <div class="card">
         <div class="step">4 · Later reference</div>
-        <div class="title">Reference & verification</div>
+        <div class="title">Reference &amp; verification</div>
         <p class="text">The receipt identifier is used later in audits, disputes, incident timelines, or reviews. Verification confirms integrity only.</p>
       </div>
     </div>
@@ -256,6 +287,44 @@ receipt = issueReceipt({
 })
 
 // Later: include receipt.id in a ticket / report / dispute record.</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Conceptual flow</h2>
+    <p class="sub">
+      These diagrams show conceptual flow only. They are intentionally non-visual and implementation-agnostic.
+    </p>
+
+    <div class="card">
+      <div class="step">Core lifecycle</div>
+      <div class="flow" aria-label="Digital Action to Verification flow">
+        <div class="node">Digital Action</div>
+        <div class="arrow">→</div>
+        <div class="node">Receipt Generated</div>
+        <div class="arrow">→</div>
+        <div class="node">Receipt Identifier</div>
+        <div class="arrow">→</div>
+        <div class="node">Referenced Later</div>
+        <div class="arrow">→</div>
+        <div class="node">Integrity Verified</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <div class="step">Agent-initiated action</div>
+      <div class="flow" aria-label="Agent to Receipt flow">
+        <div class="node">AI / Automated Agent</div>
+        <div class="arrow">→</div>
+        <div class="node">Action Executed</div>
+        <div class="arrow">→</div>
+        <div class="node">Receipt Generated</div>
+      </div>
+    </div>
+
+    <div class="note">
+      These flows describe <b>occurrence and referenceability only</b>.
+      They intentionally exclude reasoning, correctness, intent, enforcement, or explanation.
     </div>
   </section>
 
