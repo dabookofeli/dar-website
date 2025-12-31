@@ -42,20 +42,69 @@
       padding:14px 0;
       gap:16px;
     }
+
+    /* Brand = clean “home” affordance (entire block clickable) */
     .brand{
-      display:flex; flex-direction:column; gap:2px;
-      min-width:200px;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      text-decoration:none;
+      min-width:0;
     }
     .brand strong{font-size:14px; color:var(--nav)}
     .brand span{font-size:12px; color:var(--muted)}
+    .brand:hover strong{text-decoration:underline}
+    .brand:focus-visible{
+      outline:2px solid var(--line);
+      outline-offset:4px;
+      border-radius:6px;
+    }
 
     nav ul{
       list-style:none; margin:0; padding:0;
       display:flex; gap:16px; flex-wrap:wrap;
       font-size:13px;
-      justify-content:flex-end;
     }
     nav a{color:var(--nav)}
+    nav a:hover{text-decoration:underline}
+
+    /* Current page indicator (calm, no JS) */
+    nav a.active{
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+    nav a.active::after{
+      content:"";
+      display:inline-block;
+      width:6px; height:6px;
+      border-radius:99px;
+      background:var(--accent);
+      margin-left:8px;
+      vertical-align:middle;
+      opacity:.75;
+    }
+
+    /* Page-specific active states using body[data-page] */
+    body[data-page="definition"] nav a[href="/definition.html"]{ text-decoration:underline; text-underline-offset:4px; }
+    body[data-page="definition"] nav a[href="/definition.html"]::after{ content:""; display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--accent); margin-left:8px; vertical-align:middle; opacity:.75; }
+
+    body[data-page="how"] nav a[href="/how-it-works.html"]{ text-decoration:underline; text-underline-offset:4px; }
+    body[data-page="how"] nav a[href="/how-it-works.html"]::after{ content:""; display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--accent); margin-left:8px; vertical-align:middle; opacity:.75; }
+
+    body[data-page="usecases"] nav a[href="/use-cases.html"]{ text-decoration:underline; text-underline-offset:4px; }
+    body[data-page="usecases"] nav a[href="/use-cases.html"]::after{ content:""; display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--accent); margin-left:8px; vertical-align:middle; opacity:.75; }
+
+    body[data-page="boundaries"] nav a[href="/boundaries.html"]{ text-decoration:underline; text-underline-offset:4px; }
+    body[data-page="boundaries"] nav a[href="/boundaries.html"]::after{ content:""; display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--accent); margin-left:8px; vertical-align:middle; opacity:.75; }
+
+    body[data-page="memos"] nav a[href="/memos.html"]{ text-decoration:underline; text-underline-offset:4px; }
+    body[data-page="memos"] nav a[href="/memos.html"]::after{ content:""; display:inline-block; width:6px; height:6px; border-radius:99px; background:var(--accent); margin-left:8px; vertical-align:middle; opacity:.75; }
+
+    /* Home subtle indicator: brand is “active” on homepage only */
+    body[data-page="home"] .brand strong{
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
 
     main{padding:42px 0 64px}
     h1{
@@ -68,6 +117,12 @@
       margin:0;
       color:var(--muted);
       font-size:16px;
+      max-width:760px;
+    }
+    .sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:14px;
       max-width:760px;
     }
     .code{
@@ -132,13 +187,13 @@
       color:var(--muted);
       text-transform:uppercase;
       margin-bottom:6px;
+      letter-spacing:.04em;
     }
     .cols{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:18px;
     }
-
     footer{
       border-top:1px solid var(--line);
       padding:26px 0 36px;
@@ -157,16 +212,15 @@
   </style>
 </head>
 
-<body>
+<body data-page="home">
 
 <header>
   <div class="wrap">
     <div class="nav">
-      <div class="brand">
+      <a href="/" class="brand" aria-label="Return to homepage">
         <strong>Digital Action Receipts</strong>
         <span>Neutral infrastructure primitive</span>
-      </div>
-
+      </a>
       <nav aria-label="Primary">
         <ul>
           <li><a href="/definition.html">Definition</a></li>
@@ -182,7 +236,7 @@
 
 <main class="wrap">
 
-  <section>
+  <section style="border-top:none; padding-top:0;">
     <h1>Digital Action Receipts</h1>
     <p class="lede">
       Verifiable, append-only records of digital actions, generated at the moment they occur —
@@ -203,12 +257,37 @@ await issueReceipt({
     <div class="doclinks">
       <a href="/definition.html">Read the definition</a>
       <a href="/boundaries.html">System boundaries &amp; non-goals</a>
+      <a href="/how-it-works.html">How it works</a>
     </div>
 
     <div class="callouts">
       <div><b>Records occurrence</b> at the moment an action happens.</div>
       <div><b>Verifies integrity</b> without privileged system access.</div>
       <div><b>Does not explain</b>, judge, or enforce decisions.</div>
+    </div>
+  </section>
+
+  <section id="start">
+    <h2>Start here</h2>
+    <p class="sub">
+      A short set of pages that define the primitive, its boundaries, and how it fits alongside existing systems.
+    </p>
+
+    <div class="doclinks">
+      <a href="/definition.html">Definition (canonical)</a>
+      <a href="/boundaries.html">System boundaries &amp; non-goals</a>
+      <a href="/how-it-works.html">How it works</a>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <div class="step">Core invariants</div>
+      <ul class="bullets" style="margin-top:8px;">
+        <li>Generated at the <b>moment of action</b> (not reconstructed later).</li>
+        <li><b>Append-only</b>: previously stored receipts are not modified or removed.</li>
+        <li><b>Verifiable</b> for integrity (unaltered vs mismatch detected).</li>
+        <li>Independent of later representation or explanation.</li>
+        <li>No correctness, intent, or enforcement claims.</li>
+      </ul>
     </div>
   </section>
 
@@ -222,7 +301,7 @@ await issueReceipt({
   </section>
 
   <section id="how">
-    <h2>How it works (conceptual)</h2>
+    <h2>How it works</h2>
     <div class="how">
       <div class="card">
         <div class="step">Action occurs</div>
@@ -241,10 +320,6 @@ await issueReceipt({
         Verification confirms the receipt has not been altered.
       </div>
     </div>
-
-    <div class="doclinks" style="margin-top:14px;">
-      <a href="/how-it-works.html">Read “How it works”</a>
-    </div>
   </section>
 
   <section id="usecases">
@@ -261,9 +336,30 @@ await issueReceipt({
         <li>Any system requiring post-hoc proof of action</li>
       </ul>
     </div>
-
     <div class="doclinks" style="margin-top:14px;">
-      <a href="/use-cases.html">Browse use cases</a>
+      <a href="/use-cases.html">Explore use cases</a>
+    </div>
+  </section>
+
+  <section id="docs">
+    <h2>Docs</h2>
+    <ul class="bullets">
+      <li><a href="/definition.html">Definition</a></li>
+      <li><a href="/how-it-works.html">How it works</a></li>
+      <li><a href="/boundaries.html">System boundaries &amp; non-goals</a></li>
+      <li><a href="/use-cases.html">Use cases</a></li>
+      <li><a href="/memos.html">Memos</a></li>
+    </ul>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p class="sub">
+      If you are evaluating referenceable proof-of-action artifacts for audits, disputes, incident review,
+      or agentic systems, you can reach out for a short technical conversation.
+    </p>
+    <div class="doclinks">
+      <a href="mailto:contact@digitalactionreceipts.com">contact@digitalactionreceipts.com</a>
     </div>
   </section>
 
