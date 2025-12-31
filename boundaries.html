@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>System Boundaries &amp; Non-Goals — Digital Action Receipts</title>
-  <meta name="description" content="Explicit system boundaries and non-goals for Digital Action Receipts. Clarifies what DAR does not do to prevent misinterpretation and scope creep." />
+  <title>Boundaries · Digital Action Receipts</title>
+  <meta name="description" content="System boundaries and non-goals for Digital Action Receipts. What DARs do, and what they explicitly do not do." />
 
   <style>
     :root{
@@ -29,6 +29,7 @@
     a{color:var(--accent); text-decoration:none}
     a:hover{text-decoration:underline}
     .wrap{max-width:980px; margin:0 auto; padding:0 20px}
+
     header{
       position:sticky; top:0;
       background:rgba(255,255,255,0.94);
@@ -41,9 +42,7 @@
       padding:14px 0;
       gap:16px;
     }
-    .brand{
-      display:flex; flex-direction:column; gap:2px;
-    }
+    .brand{display:flex; flex-direction:column; gap:2px;}
     .brand strong{font-size:14px; color:var(--nav)}
     .brand span{font-size:12px; color:var(--muted)}
     nav ul{
@@ -52,41 +51,38 @@
       font-size:13px;
     }
     nav a{color:var(--nav)}
-    nav a[aria-current="page"]{
-      color:var(--ink);
-      text-decoration:none;
-      border-bottom:2px solid var(--line);
-      padding-bottom:2px;
-    }
+
     main{padding:42px 0 64px}
+
     h1{
       margin:0 0 10px;
-      font-size:38px;
-      letter-spacing:-0.6px;
-      line-height:1.14;
+      font-size:40px;
+      letter-spacing:-0.5px;
+      line-height:1.15;
     }
     .lede{
       margin:0;
       color:var(--muted);
       font-size:16px;
-      max-width:820px;
+      max-width:900px;
     }
+
     section{
       padding:28px 0;
       border-top:1px solid var(--line);
     }
-    section:first-of-type{border-top:none}
     h2{
       margin:0 0 10px;
       font-size:16px;
       color:var(--nav);
     }
-    .bullets{
-      margin:10px 0 0;
-      padding-left:18px;
+    .sub{
+      margin:0 0 14px;
       color:var(--muted);
       font-size:14px;
+      max-width:900px;
     }
+
     .grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -96,36 +92,74 @@
       border:1px solid var(--line);
       border-radius:12px;
       background:#fff;
-      padding:14px;
+      padding:16px;
     }
-    .callout{
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:var(--panel);
-      padding:14px;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .callout b{color:var(--ink)}
-    .kicker{
+    .card + .card{margin-top:12px}
+
+    .step{
       font-size:12px;
       color:var(--muted);
       text-transform:uppercase;
-      letter-spacing:0.06em;
       margin-bottom:6px;
+      letter-spacing:.04em;
     }
-    .doclinks{
-      margin:12px 0 0;
-      display:flex; gap:14px; flex-wrap:wrap;
-      font-size:13px;
-    }
-    .doclinks a{
-      padding:8px 10px;
-      border:1px solid var(--line);
-      border-radius:10px;
+    .title{
+      margin:0 0 6px;
+      font-size:14px;
       color:var(--nav);
-      background:#fff;
+      font-weight:600;
     }
+    .text{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .bullets{
+      margin:10px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .note{
+      margin-top:14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--panel);
+      padding:14px 16px;
+      color:var(--muted);
+      font-size:13px;
+      max-width:900px;
+    }
+    .note b{color:var(--ink)}
+
+    .rule{
+      border-left:3px solid var(--line);
+      padding-left:12px;
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      max-width:900px;
+    }
+
+    .pillrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+    .pill{
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:var(--panel);
+      padding:7px 10px;
+      font-size:12.5px;
+      color:var(--nav);
+      white-space:nowrap;
+    }
+    .pill.bad{background:#fff;border-style:dashed;color:var(--muted)}
+    .pill b{color:var(--ink)}
+
     footer{
       border-top:1px solid var(--line);
       padding:26px 0 36px;
@@ -136,8 +170,9 @@
       display:flex; justify-content:space-between; flex-wrap:wrap;
       gap:12px;
     }
+
     @media (max-width:860px){
-      h1{font-size:30px}
+      h1{font-size:34px}
       .grid{grid-template-columns:1fr}
     }
   </style>
@@ -149,17 +184,16 @@
   <div class="wrap">
     <div class="nav">
       <div class="brand">
-        <strong>Digital Action Receipts</strong>
+        <strong><a href="/" style="color:var(--nav); text-decoration:none;">Digital Action Receipts</a></strong>
         <span>Neutral infrastructure primitive</span>
       </div>
-      <nav>
+      <nav aria-label="Primary">
         <ul>
           <li><a href="/definition.html">Definition</a></li>
-          <li><a href="/#problem">Problem</a></li>
-          <li><a href="/#how">How it works</a></li>
-          <li><a href="/#usecases">Use cases</a></li>
-          <li><a href="/boundaries.html" aria-current="page">Boundaries</a></li>
-          <li><a href="/#docs">Docs</a></li>
+          <li><a href="/how-it-works.html">How it works</a></li>
+          <li><a href="/use-cases.html">Use cases</a></li>
+          <li><a href="/boundaries.html">Boundaries</a></li>
+          <li><a href="/memos.html">Memos</a></li>
         </ul>
       </nav>
     </div>
@@ -168,132 +202,202 @@
 
 <main class="wrap">
 
-  <section>
-    <h1>System Boundaries &amp; Non-Goals</h1>
+  <section style="border-top:none; padding-top:0;">
+    <h1>System boundaries &amp; non-goals</h1>
     <p class="lede">
-      Digital Action Receipts are intentionally narrow. This page states, explicitly, what the system does not do.
-      These boundaries protect correctness, prevent scope creep, and reduce misinterpretation.
+      Digital Action Receipts are intentionally constrained. This page states what DARs do — and what they explicitly do not do.
+      The purpose is clarity: receipts remain neutral artifacts that record occurrence and support integrity verification later,
+      independent of representation or explanation.
     </p>
 
-    <div class="doclinks">
-      <a href="/definition.html">Back to Definition</a>
-      <a href="/#docs">Docs index</a>
+    <div class="note">
+      If a capability is not listed as “in scope,” assume it is out of scope.
+      DARs should remain useful even when teams, vendors, and systems change.
     </div>
   </section>
 
-  <section id="boundary-statement">
-    <h2>Boundary statement</h2>
-    <div class="callout">
-      <b>Digital Action Receipts record occurrence, not outcomes.</b>
-      They generate a verifiable, append-only record at the Moment of Action, and support Verification of integrity only.
-      They do not explain, judge, validate, enforce, or optimize decisions.
-    </div>
-
-    <ul class="bullets">
-      <li>The system’s purpose is to create a referenceable record that an action occurred at a particular time.</li>
-      <li>Verification confirms whether a receipt has been altered or mismatched.</li>
-      <li>Anything involving correctness, justification, or enforcement is out of scope.</li>
-    </ul>
-  </section>
-
-  <section id="non-goals">
-    <h2>Non-goals (explicit exclusions)</h2>
+  <section>
+    <h2>In scope</h2>
+    <p class="sub">
+      The minimum commitments that define the primitive.
+    </p>
 
     <div class="grid">
       <div class="card">
-        <div class="kicker">Not a logging system</div>
-        Digital Action Receipts do not replace operational logs or application logging. They are not intended for
-        debugging, observability, or performance tracing.
+        <div class="step">Scope</div>
+        <div class="title">Record occurrence at the moment of action</div>
+        <p class="text">
+          When a digital system takes a Digital Action, a Digital Action Receipt may be generated contemporaneously
+          with that action.
+        </p>
       </div>
 
       <div class="card">
-        <div class="kicker">Not an audit trail</div>
-        Digital Action Receipts are not designed as a complete historical narrative of system behavior. They do not
-        guarantee completeness, coverage, or policy alignment.
+        <div class="step">Scope</div>
+        <div class="title">Return a receipt identifier and integrity information</div>
+        <p class="text">
+          A receipt provides a stable reference identifier and integrity information sufficient to support later verification.
+        </p>
       </div>
 
       <div class="card">
-        <div class="kicker">Not a compliance tool</div>
-        Digital Action Receipts do not determine compliance, produce compliance conclusions, or certify adherence to
-        regulations or internal controls.
+        <div class="step">Scope</div>
+        <div class="title">Append-only behavior</div>
+        <p class="text">
+          Receipts are stored in an append-only record sequence in which previously stored receipts are not modified or removed.
+        </p>
       </div>
 
       <div class="card">
-        <div class="kicker">Not decision validation</div>
-        Verification is not correctness validation. A verified receipt only indicates integrity of the recorded receipt,
-        not that the action was correct or permitted.
+        <div class="step">Scope</div>
+        <div class="title">Verification of integrity only</div>
+        <p class="text">
+          Verification confirms whether a receipt has been altered (integrity confirmed vs mismatch detected) — nothing more.
+        </p>
       </div>
+    </div>
 
-      <div class="card">
-        <div class="kicker">Not explainability</div>
-        Digital Action Receipts do not generate explanations, rationales, summaries, or narratives about why an action
-        occurred or what the actor intended.
-      </div>
-
-      <div class="card">
-        <div class="kicker">Not enforcement</div>
-        Digital Action Receipts do not block actions, approve actions, deny actions, or enforce rules. They are not a
-        gatekeeper or policy engine.
-      </div>
-
-      <div class="card">
-        <div class="kicker">Not monitoring or analytics</div>
-        Digital Action Receipts do not provide dashboards, trend monitoring, anomaly detection, or behavioral scoring.
-        Any analytics overlays are out of scope for this primitive.
-      </div>
-
-      <div class="card">
-        <div class="kicker">Not reconstruction</div>
-        The system is not designed to reconstruct internal state or infer what “really happened” beyond the receipt.
-        The receipt is generated at the Moment of Action, not reconstructed after the fact.
-      </div>
+    <div class="rule">
+      <b>Scope rule:</b> DARs record <b>that</b> an action occurred and allow later verification of <b>integrity</b>.
+      They do not assert why it occurred, whether it was correct, or whether it was permitted.
     </div>
   </section>
 
-  <section id="integrity-only">
-    <h2>Integrity-only verification</h2>
+  <section>
+    <h2>Explicit non-goals</h2>
+    <p class="sub">
+      These are intentionally excluded to preserve neutrality and avoid turning receipts into a monitoring or enforcement product.
+    </p>
 
-    <div class="callout">
-      <b>Verification confirms integrity only.</b> No correctness • No intent • No enforcement.
+    <div class="card">
+      <div class="step">Non-goals</div>
+      <div class="title">DARs do not validate correctness</div>
+      <p class="text">
+        A receipt does not prove that an action was correct, appropriate, compliant, or desirable. It records occurrence only.
+      </p>
+
+      <div class="divider" style="margin-top:14px; padding-top:14px; border-top:1px solid var(--line);"></div>
+
+      <div class="title">DARs do not explain intent or reasoning</div>
+      <p class="text">
+        Receipts do not provide explanation, rationale, model reasoning, decision justification, or human intent interpretation.
+      </p>
+
+      <div class="divider" style="margin-top:14px; padding-top:14px; border-top:1px solid var(--line);"></div>
+
+      <div class="title">DARs do not enforce policy</div>
+      <p class="text">
+        Receipts do not permit/deny actions, apply rules, trigger approvals, or function as an authorization layer.
+      </p>
+
+      <div class="divider" style="margin-top:14px; padding-top:14px; border-top:1px solid var(--line);"></div>
+
+      <div class="title">DARs are not monitoring, analytics, or dashboards</div>
+      <p class="text">
+        DARs do not provide dashboards, alerting, behavioral scoring, performance monitoring, or surveillance.
+      </p>
+
+      <div class="divider" style="margin-top:14px; padding-top:14px; border-top:1px solid var(--line);"></div>
+
+      <div class="title">DARs do not replace existing operational records</div>
+      <p class="text">
+        DARs coexist with logs, metrics, audits, and system records. They provide an independent reference artifact, not a replacement.
+      </p>
     </div>
 
-    <ul class="bullets">
-      <li>Verification determines whether a receipt appears altered or mismatched relative to its Integrity Information.</li>
-      <li>Verification does not validate that the action should have happened, was justified, or produced a correct outcome.</li>
-      <li>Verification does not authenticate identity beyond what the Action-Originating System represents.</li>
-    </ul>
+    <div class="note">
+      A useful test: if a feature sounds like <b>control</b>, <b>judgment</b>, <b>monitoring</b>, or <b>compliance claims</b>, it is out of scope.
+    </div>
   </section>
 
-  <section id="coexistence">
-    <h2>Coexistence with existing records</h2>
-    <ul class="bullets">
-      <li>Digital Action Receipts coexist with logs, metrics, and audit processes.</li>
-      <li>Operational records may provide context; receipts provide a stable reference point for “this occurred.”</li>
-      <li>The system does not require replacing existing tooling or process.</li>
-    </ul>
-  </section>
+  <section>
+    <h2>Boundary of responsibility</h2>
+    <p class="sub">
+      The boundary is deliberate: the originating system is responsible for deciding and acting; the receipt system is responsible for recording occurrence and verifying integrity later.
+    </p>
 
-  <section id="scope-control">
-    <h2>Scope control (what would be separate invention families)</h2>
-    <div class="callout">
-      Extensions that introduce event detection, monitoring, policy evaluation, or automated interpretation are intentionally separate.
-      If included at all, they should be treated as separate invention families and separate product surfaces.
+    <div class="grid">
+      <div class="card">
+        <div class="step">Originating system</div>
+        <div class="title">Decides and acts</div>
+        <ul class="bullets">
+          <li>Defines policies, rules, workflows, and models.</li>
+          <li>Determines whether and how an action occurs.</li>
+          <li>Maintains operational records (logs, audits, case records).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="step">Receipt layer</div>
+        <div class="title">Records and verifies</div>
+        <ul class="bullets">
+          <li>Generates a receipt at the moment of action.</li>
+          <li>Stores receipts in an append-only record sequence.</li>
+          <li>Supports integrity verification by reference.</li>
+        </ul>
+      </div>
     </div>
 
-    <ul class="bullets">
-      <li>Event-triggering systems that decide when to trigger a receipt</li>
-      <li>Boundary/rule receipts (BRR) that formalize rule boundaries or governance events</li>
-      <li>Analytics overlays, scoring, monitoring, or anomaly detection</li>
-      <li>Decision explanation layers or narrative generation</li>
-    </ul>
+    <div class="pillrow">
+      <span class="pill"><b>Allowed:</b> occurrence</span>
+      <span class="pill"><b>Allowed:</b> reference identifier</span>
+      <span class="pill"><b>Allowed:</b> integrity verification</span>
+      <span class="pill bad"><b>Excluded:</b> correctness</span>
+      <span class="pill bad"><b>Excluded:</b> intent</span>
+      <span class="pill bad"><b>Excluded:</b> enforcement</span>
+      <span class="pill bad"><b>Excluded:</b> monitoring</span>
+    </div>
   </section>
 
-  <section id="related">
-    <h2>Related documents</h2>
-    <ul class="bullets">
-      <li><a href="/definition.html">Definition</a></li>
-      <li><a href="/#docs">Docs index</a></li>
-    </ul>
+  <section>
+    <h2>What “verification” means here</h2>
+    <p class="sub">
+      Verification is intentionally narrow. It is the ability to confirm that a receipt has not been altered since issuance.
+    </p>
+
+    <div class="card">
+      <div class="step">Verification</div>
+      <div class="title">Integrity-only outcome</div>
+      <ul class="bullets">
+        <li><b>Integrity confirmed</b>: the receipt matches the stored record.</li>
+        <li><b>Mismatch detected</b>: the receipt or associated integrity information does not match.</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      Verification does <b>not</b> confirm correctness, compliance, authorization, intent, business meaning, or “truth” beyond integrity of the artifact.
+    </div>
+  </section>
+
+  <section>
+    <h2>Optional extension boundary</h2>
+    <p class="sub">
+      Event-triggered receipts are a separate extension pattern. It introduces an event-triggering system that determines when to trigger receipt generation,
+      while the receipt service remains responsible for generating the receipt independently.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="step">Extension</div>
+        <div class="title">Event-triggering system</div>
+        <p class="text">
+          Observes signals/state over time, determines when a receipt-worthy event has occurred, and emits a trigger signal at a trigger moment.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="step">Core</div>
+        <div class="title">Receipt service</div>
+        <p class="text">
+          Generates the Digital Action Receipt when invoked. It does not perform event detection or decide when to trigger.
+        </p>
+      </div>
+    </div>
+
+    <div class="rule">
+      <b>Separation rule:</b> the event-triggering system determines <b>when</b> to invoke receipt generation.
+      The receipt service determines <b>how</b> to generate the receipt (independently).
+    </div>
   </section>
 
 </main>
@@ -302,7 +406,7 @@
   <div class="wrap">
     <div class="foot">
       <div><strong>Digital Action Receipts ©</strong> — neutral, append-only proof of action.</div>
-      <div>Originated at EF Digital Sol · Independent infrastructure research</div>
+      <div>Independent infrastructure research</div>
     </div>
     <div style="margin-top:10px;">
       No dashboards. No monitoring. Just facts, referenceable later.
@@ -312,3 +416,4 @@
 
 </body>
 </html>
+```0
