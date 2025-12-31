@@ -3,122 +3,387 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Receipt Definition — Digital Action Receipts</title>
-  <meta name="description" content="Definition and properties of a Digital Action Receipt." />
+  <title>Definition — Digital Action Receipts</title>
+  <meta name="description" content="Canonical definition of Digital Action Receipts: a neutral infrastructure primitive for generating verifiable, append-only records of Digital Actions at the Moment of Action." />
+
   <style>
     :root{
-      --bg:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0; --card:#f8fafc; --accent:#1d4ed8;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --bg:#ffffff;
+      --ink:#0b1220;
+      --muted:#4a5568;
+      --line:#e6eaf0;
+      --panel:#f7f9fc;
+      --accent:#2b5fd9;
+      --nav:#0f172a;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
     *{box-sizing:border-box}
-    body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.55}
-    .wrap{max-width:920px; margin:0 auto; padding:34px 22px 64px}
-    header{display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding-bottom:16px; border-bottom:1px solid var(--line)}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:var(--sans);
+      line-height:1.55;
+    }
     a{color:var(--accent); text-decoration:none}
     a:hover{text-decoration:underline}
-    h1{font-size:34px; letter-spacing:-0.02em; margin:22px 0 8px}
-    h2{font-size:18px; margin:26px 0 10px}
-    p{margin:0 0 10px}
-    .muted{color:var(--muted)}
-    .card{margin:14px 0; padding:14px; background:var(--card); border:1px solid var(--line); border-radius:14px}
-    pre{margin:10px 0 0; padding:12px; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:12px; font-family:var(--mono); font-size:12px}
-    ul{margin:8px 0 0 18px}
-    li{margin:6px 0; color:var(--muted)}
-    .topnav{font-size:14px; color:var(--muted)}
-    .pill{display:inline-block; font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 10px; background:#fff; margin-right:8px}
-    footer{padding-top:18px; border-top:1px solid var(--line); margin-top:28px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .wrap{max-width:980px; margin:0 auto; padding:0 20px}
+    header{
+      position:sticky; top:0;
+      background:rgba(255,255,255,0.94);
+      backdrop-filter:saturate(180%) blur(10px);
+      border-bottom:1px solid var(--line);
+      z-index:10;
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:16px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .brand strong{font-size:14px; color:var(--nav)}
+    .brand span{font-size:12px; color:var(--muted)}
+    nav ul{
+      list-style:none; margin:0; padding:0;
+      display:flex; gap:16px; flex-wrap:wrap;
+      font-size:13px;
+    }
+    nav a{color:var(--nav)}
+    nav a[aria-current="page"]{
+      color:var(--ink);
+      text-decoration:none;
+      border-bottom:2px solid var(--line);
+      padding-bottom:2px;
+    }
+    main{padding:42px 0 64px}
+    h1{
+      margin:0 0 10px;
+      font-size:40px;
+      letter-spacing:-0.6px;
+      line-height:1.14;
+    }
+    .lede{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      max-width:800px;
+    }
+    section{
+      padding:28px 0;
+      border-top:1px solid var(--line);
+    }
+    section:first-of-type{border-top:none}
+    h2{
+      margin:0 0 10px;
+      font-size:16px;
+      color:var(--nav);
+    }
+    .bullets{
+      margin:10px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      padding:14px;
+    }
+    .kicker{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      margin-bottom:6px;
+    }
+    .callout{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--panel);
+      padding:14px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .callout b{color:var(--ink)}
+    .code{
+      margin:12px 0 0;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--panel);
+      overflow:auto;
+    }
+    pre{
+      margin:0;
+      padding:16px 18px;
+      font-family:var(--mono);
+      font-size:12.5px;
+      white-space:pre;
+    }
+    .doclinks{
+      margin:12px 0 0;
+      display:flex; gap:14px; flex-wrap:wrap;
+      font-size:13px;
+    }
+    .doclinks a{
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      color:var(--nav);
+      background:#fff;
+    }
+    footer{
+      border-top:1px solid var(--line);
+      padding:26px 0 36px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .foot{
+      display:flex; justify-content:space-between; flex-wrap:wrap;
+      gap:12px;
+    }
+    @media (max-width:860px){
+      h1{font-size:32px}
+      .grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <header>
-      <div class="topnav">
-        <a href="../index.html">← Home</a>
-        <span class="muted"> / Receipt definition</span>
-      </div>
-      <div class="muted" style="font-size:13px">Digital Action Receipts</div>
-    </header>
 
-    <h1>Receipt Definition</h1>
-    <p class="muted">
-      A <strong>Digital Action Receipt</strong> is a neutral, append-only, tamper-evident record that a specific digital action occurred,
-      issued at the moment the action executes, so it can be referenced and verified later.
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <strong>Digital Action Receipts</strong>
+        <span>Neutral infrastructure primitive</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/definition.html" aria-current="page">Definition</a></li>
+          <li><a href="/#problem">Problem</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#usecases">Use cases</a></li>
+          <li><a href="/boundaries.html">Boundaries</a></li>
+          <li><a href="/#docs">Docs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h1>Definition</h1>
+    <p class="lede">
+      This page defines the canonical terms used across the website, diagrams, and patent materials.
+      The definitions are system-agnostic, implementation-neutral, and problem-first.
     </p>
 
-    <div class="card">
-      <div class="pill">Goal</div>
-      <p class="muted" style="margin-top:8px">
-        Replace “post-hoc reconstruction” (logs + screenshots + narratives) with <strong>evidence created at decision time</strong>.
-        A receipt is the smallest possible proof artifact that can survive across systems, teams, and vendors.
-      </p>
+    <div class="doclinks">
+      <a href="/boundaries.html">System boundaries &amp; non-goals</a>
+      <a href="/#docs">Docs index</a>
+    </div>
+  </section>
+
+  <section id="canonical-definition">
+    <h2>Digital Action Receipt</h2>
+
+    <div class="callout">
+      <b>Digital Action Receipt</b> means an append-only, verifiable record generated by a <b>Receipt Service</b>
+      <b>at the Moment of Action</b>, which records that a <b>Digital Action</b> occurred, together with
+      <b>Integrity Information</b> sufficient for <b>Verification</b> of whether the receipt has been altered,
+      <b>independent of later representation, explanation, or interpretation</b>.
     </div>
 
-    <h2>Canonical properties</h2>
-    <ul>
-      <li><strong>Issued at execution time:</strong> created when the action happens (not hours/days later).</li>
-      <li><strong>Append-only:</strong> receipts are never edited; corrections happen by issuing a new receipt.</li>
-      <li><strong>Tamper-evident:</strong> integrity is verifiable via hashing/signatures and stable identifiers.</li>
-      <li><strong>Neutral:</strong> describes facts about an action without embedding internal logs or business logic.</li>
-      <li><strong>Referenceable:</strong> produces a stable receipt ID / verification link that can be pasted into tickets/docs.</li>
-      <li><strong>Independently verifiable:</strong> verification does not require privileged access to internal systems.</li>
+    <ul class="bullets">
+      <li>Records occurrence (not correctness).</li>
+      <li>Verifies integrity (not intent).</li>
+      <li>Designed to be referenced later during disputes and “what happened?” questions.</li>
     </ul>
+  </section>
 
-    <h2>What a receipt proves</h2>
-    <ul>
-      <li>That an action was <strong>issued/executed</strong> at a specific time and context.</li>
-      <li>The <strong>who/what</strong> dimensions you choose to include (actor, action, object, scope).</li>
-      <li>The <strong>integrity</strong> of the receipt contents (that it has not been altered).</li>
-      <li>A stable <strong>reference</strong> that can be used in audits/disputes (“show me the proof”).</li>
-    </ul>
+  <section id="terms">
+    <h2>Canonical terms</h2>
 
-    <h2>What a receipt does not prove</h2>
-    <ul>
-      <li>That the action was <strong>correct</strong> (only that it occurred).</li>
-      <li>That the system is secure, compliant, or well-designed.</li>
-      <li>That the underlying data is true (only that this event record is intact).</li>
-      <li>That humans interpreted the event correctly (verification is about integrity, not meaning).</li>
-    </ul>
+    <div class="grid">
 
-    <h2>Minimal receipt envelope</h2>
-    <p class="muted">A receipt should be small. The minimal envelope can look like this (fields are illustrative):</p>
-    <pre>{
-  "receipt_id": "rct_01J... (stable ID)",
-  "issued_at": "2025-12-29T18:23:11Z",
-  "actor": { "type": "user|service|agent", "id": "..." },
-  "action": "access.approved",
-  "object": { "type": "resource", "id": "payments" },
-  "ref": "internal-id-123",
-  "context": { "request_id": "...", "environment": "prod" },
-  "integrity": {
-    "hash": "sha256:...",
-    "signature": "optional"
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Digital Action</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          An action performed within a digital system by an actor (including a user, service, or agent),
+          which produces an effect or state change that is meaningful to the system or its operators.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Moment of Action</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          The time at which the Digital Action is performed or executed in the Action-Originating System,
+          at which time a Digital Action Receipt is generated contemporaneously.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Receipt Service</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          A system that generates a Digital Action Receipt upon invocation, and appends it to an
+          Append-only Record Sequence. The Receipt Service does not explain, judge, or enforce actions.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Append-only</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          A property of a record sequence in which new records may be added, while previously stored
+          records are not modified or removed.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Append-only Record Sequence</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          A sequence of stored Digital Action Receipts maintained in an append-only manner, such that
+          receipts are added over time and prior receipts remain unchanged.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Integrity Information</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          Information associated with a Digital Action Receipt that supports Verification of whether the
+          receipt has been altered, without requiring privileged access to internal operational records.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Verification</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          A process that confirms the integrity of a Digital Action Receipt by determining whether the
+          receipt and its Integrity Information indicate alteration or mismatch. Verification does not
+          validate correctness, intent, or justification.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Term</div>
+        <b>Independent of representation/explanation</b>
+        <div class="kicker" style="margin-top:10px;">Definition</div>
+        <div style="color:var(--muted); font-size:14px;">
+          A property indicating that the Digital Action Receipt is not dependent on later narratives,
+          interpretations, reconstructions, or explanations of why an action occurred; it is evidence of
+          occurrence generated at the Moment of Action.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="what-it-proves">
+    <h2>What a Digital Action Receipt proves (and does not prove)</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="kicker">Proves</div>
+        <ul class="bullets">
+          <li>A Digital Action occurred.</li>
+          <li>The receipt was generated at the Moment of Action.</li>
+          <li>The receipt’s integrity can be verified as unaltered (or flagged as mismatched).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="kicker">Does not prove</div>
+        <ul class="bullets">
+          <li>That the action was correct, permitted, or desirable.</li>
+          <li>Why the action occurred, or what the actor intended.</li>
+          <li>That a policy was followed, or that a decision was justified.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:12px;">
+      <b>Verification is integrity-only.</b> No correctness • No intent • No enforcement.
+    </div>
+  </section>
+
+  <section id="receipt-shape">
+    <h2>Conceptual receipt contents (non-prescriptive)</h2>
+    <p class="lede" style="font-size:14px;">
+      A Digital Action Receipt may include a receipt identifier, a representation of the Moment of Action,
+      and Integrity Information. This is an abstract example and not an implementation requirement.
+    </p>
+
+    <div class="code">
+      <pre><code>{
+  "receipt_id": "rct_…",
+  "moment_of_action": "…",
+  "action_summary": {
+    "actor": "…",
+    "action": "…",
+    "object": "…",
+    "ref": "…"
   },
-  "verification": { "url": "https://.../verify/rct_..." }
-}</pre>
+  "integrity_information": {
+    "…": "…"
+  }
+}</code></pre>
+    </div>
+  </section>
 
-    <h2>Design constraints (non-negotiables)</h2>
-    <ul>
-      <li><strong>No deletes / no edits.</strong> If something changes, issue a new receipt that references the prior receipt.</li>
-      <li><strong>Idempotency.</strong> The same action should not create duplicate receipts when retried.</li>
-      <li><strong>Stable identifiers.</strong> Receipt IDs must remain valid over time; avoid ephemeral links.</li>
-      <li><strong>Minimal surface area.</strong> Integrations should take minutes, not weeks.</li>
+  <section id="integration">
+    <h2>How this integrates with existing systems</h2>
+    <ul class="bullets">
+      <li>The Action-Originating System performs a Digital Action.</li>
+      <li>At the Moment of Action, the system invokes the Receipt Service (typically non-blocking).</li>
+      <li>The Receipt Service generates a Digital Action Receipt and appends it to an Append-only Record Sequence.</li>
+      <li>The receipt identifier is then referenced later (tickets, audits, reports, disputes) without requiring reconstruction.</li>
     </ul>
+  </section>
 
-    <h2>Where receipts show up first</h2>
-    <ul>
-      <li>Access approvals and privileged actions</li>
-      <li>Deployments, config changes, automation events</li>
-      <li>Payment authorizations, limit changes, release approvals</li>
-      <li>Healthcare consent/access events</li>
-      <li>AI/agent actions executed on behalf of users/orgs</li>
+  <section id="links">
+    <h2>Related documents</h2>
+    <ul class="bullets">
+      <li><a href="/boundaries.html">System boundaries &amp; non-goals</a></li>
+      <li><a href="/#docs">Docs index</a></li>
     </ul>
+  </section>
 
-    <footer>
-      <div>Originated at EF Digital Sol • Independent Infrastructure Research</div>
-      <div><a href="./quickstart.html">Next: 5-minute quickstart →</a></div>
-    </footer>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong>Digital Action Receipts ©</strong> — neutral, append-only proof of action.</div>
+      <div>Originated at EF Digital Sol · Independent infrastructure research</div>
+    </div>
+    <div style="margin-top:10px;">
+      No dashboards. No monitoring. Just facts, referenceable later.
+    </div>
   </div>
+</footer>
+
 </body>
 </html>
-
