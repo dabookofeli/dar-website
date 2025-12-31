@@ -29,6 +29,7 @@
     a{color:var(--accent); text-decoration:none}
     a:hover{text-decoration:underline}
     .wrap{max-width:980px; margin:0 auto; padding:0 20px}
+
     header{
       position:sticky; top:0;
       background:rgba(255,255,255,0.94);
@@ -36,23 +37,89 @@
       border-bottom:1px solid var(--line);
       z-index:10;
     }
+
     .nav{
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 0;
       gap:16px;
     }
+
     .brand{
       display:flex; flex-direction:column; gap:2px;
+      min-width: 220px;
     }
     .brand strong{font-size:14px; color:var(--nav)}
     .brand span{font-size:12px; color:var(--muted)}
+
     nav ul{
       list-style:none; margin:0; padding:0;
       display:flex; gap:16px; flex-wrap:wrap;
       font-size:13px;
     }
     nav a{color:var(--nav)}
+
+    /* --- Option 1: Mobile "Brand + Menu" with drawer-like panel --- */
+    .menuBtn{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:40px;
+      height:36px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      color:var(--nav);
+      cursor:pointer;
+      padding:0;
+      user-select:none;
+    }
+    .menuBtn:focus{outline:2px solid rgba(43,95,217,0.25); outline-offset:2px}
+
+    /* Hamburger lines */
+    .menuIcon{
+      width:18px;
+      height:12px;
+      position:relative;
+    }
+    .menuIcon span{
+      position:absolute;
+      left:0;
+      width:100%;
+      height:2px;
+      background:var(--nav);
+      border-radius:2px;
+      transition:transform .18s ease, top .18s ease, opacity .18s ease;
+    }
+    .menuIcon span:nth-child(1){top:0}
+    .menuIcon span:nth-child(2){top:5px}
+    .menuIcon span:nth-child(3){top:10px}
+
+    /* Collapsible nav container (mobile) */
+    .mobilePanel{
+      display:none;
+      border-top:1px solid var(--line);
+      padding:10px 0 14px;
+    }
+    .mobilePanel ul{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px 12px;
+      font-size:13px;
+    }
+    .mobilePanel a{
+      display:block;
+      padding:10px 10px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      color:var(--nav);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
     main{padding:42px 0 64px}
+
     h1{
       margin:0 0 10px;
       font-size:44px;
@@ -143,23 +210,49 @@
       display:flex; justify-content:space-between; flex-wrap:wrap;
       gap:12px;
     }
+
     @media (max-width:860px){
       h1{font-size:36px}
       .how,.cols{grid-template-columns:1fr}
+    }
+
+    /* Mobile header behavior */
+    @media (max-width:720px){
+      .nav{
+        padding:12px 0;
+      }
+      .brand{
+        min-width:auto;
+      }
+      /* hide desktop nav list, show hamburger */
+      nav{display:none;}
+      .menuBtn{display:inline-flex;}
+      .mobilePanel{display:none;}
+      header[data-open="true"] .mobilePanel{display:block;}
+      /* animate hamburger to X when open */
+      header[data-open="true"] .menuIcon span:nth-child(1){top:5px; transform:rotate(45deg)}
+      header[data-open="true"] .menuIcon span:nth-child(2){opacity:0}
+      header[data-open="true"] .menuIcon span:nth-child(3){top:5px; transform:rotate(-45deg)}
+    }
+
+    @media (max-width:420px){
+      .mobilePanel ul{grid-template-columns:1fr;}
     }
   </style>
 </head>
 
 <body>
 
-<header>
+<header id="siteHeader" data-open="false">
   <div class="wrap">
     <div class="nav">
       <div class="brand">
         <strong>Digital Action Receipts</strong>
         <span>Neutral infrastructure primitive</span>
       </div>
-      <nav>
+
+      <!-- Desktop nav (unchanged behavior, hidden on mobile via CSS) -->
+      <nav aria-label="Primary">
         <ul>
           <li><a href="/definition.html">Definition</a></li>
           <li><a href="#problem">Problem</a></li>
@@ -169,6 +262,25 @@
           <li><a href="#docs">Docs</a></li>
         </ul>
       </nav>
+
+      <!-- Mobile menu button (Option 1) -->
+      <button class="menuBtn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <div class="menuIcon" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Mobile panel -->
+    <div class="mobilePanel" id="mobileNav" aria-label="Mobile navigation">
+      <ul>
+        <li><a href="/definition.html">Definition</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#usecases">Use cases</a></li>
+        <li><a href="/boundaries.html">Boundaries</a></li>
+        <li><a href="#docs">Docs</a></li>
+      </ul>
     </div>
   </div>
 </header>
@@ -273,6 +385,41 @@ await issueReceipt({
     </div>
   </div>
 </footer>
+
+<script>
+  (function () {
+    const header = document.getElementById('siteHeader');
+    const btn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function setOpen(open) {
+      header.setAttribute('data-open', open ? 'true' : 'false');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+
+    btn.addEventListener('click', function () {
+      const isOpen = header.getAttribute('data-open') === 'true';
+      setOpen(!isOpen);
+    });
+
+    // Close on link click (mobile only)
+    mobileNav.addEventListener('click', function (e) {
+      const t = e.target;
+      if (t && t.tagName === 'A') setOpen(false);
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    // Ensure menu resets when resizing to desktop
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 720) setOpen(false);
+    });
+  })();
+</script>
 
 </body>
 </html>
