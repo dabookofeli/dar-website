@@ -1,373 +1,252 @@
+<!-- FILE: definition.html -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Definition · Digital Action Receipts</title>
-  <meta name="description" content="Canonical definition of Digital Action Receipts as a neutral infrastructure primitive." />
-
+  <meta name="description" content="A formal definition of Digital Action Receipts (DAR): verifiable, append-only records of digital actions issued at execution time." />
+  <meta name="color-scheme" content="light" />
   <style>
     :root{
-      --bg:#ffffff;
-      --ink:#0b1220;
-      --muted:#4a5568;
-      --line:#e6eaf0;
-      --panel:#f7f9fc;
-      --accent:#2b5fd9;
-      --nav:#0f172a;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --bg:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0; --card:#f8fafc; --accent:#1d4ed8;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --radius:14px;
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family:var(--sans);
-      line-height:1.55;
-    }
-    body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:var(--sans);
-  line-height:1.55;
-}
-    a{color:var(--accent); text-decoration:none}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .wrap{max-width:980px; margin:0 auto; padding:0 20px}
-
-    header{
-      position:sticky; top:0;
-      background:rgba(255,255,255,0.94);
-      backdrop-filter:saturate(180%) blur(10px);
-      border-bottom:1px solid var(--line);
-      z-index:10;
+    .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
+      backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+    .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+    .brand strong{font-weight:650;letter-spacing:-.02em}
+    .brand small{color:var(--muted);font-family:var(--mono);font-size:12px}
+    nav ul{list-style:none;margin:0;padding:0;display:flex;gap:14px;flex-wrap:wrap}
+    nav a{display:inline-block;padding:8px 10px;border-radius:10px;color:var(--text)}
+    nav a:hover{background:var(--card);text-decoration:none}
+    nav a[aria-current="page"]{background:var(--card);border:1px solid var(--line)}
+    main{padding:42px 0 56px}
+    .hero{padding:10px 0 20px;border-bottom:1px solid var(--line)}
+    .kicker{font-family:var(--mono);font-size:12px;color:var(--muted);
+      letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px}
+    h1{margin:0 0 12px;font-size:40px;letter-spacing:-.03em;line-height:1.08}
+    .subhead{margin:0;color:var(--muted);font-size:18px;max-width:85ch}
+    .definition{
+      margin-top:18px;padding:16px;border:1px solid var(--line);
+      border-radius:var(--radius);background:var(--card);
+      font-family:var(--mono);font-size:13px
     }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0;
-      gap:16px;
-    }
-    .brand{display:flex; flex-direction:column; gap:2px;}
-    .brand strong{font-size:14px; color:var(--nav)}
-    .brand span{font-size:12px; color:var(--muted)}
-    nav ul{
-      list-style:none; margin:0; padding:0;
-      display:flex; gap:16px; flex-wrap:wrap;
-      font-size:13px;
-    }
-    nav a{color:var(--nav)}
-
-    main{padding:42px 0 64px}
-
-    h1{
-      margin:0 0 10px;
-      font-size:40px;
-      letter-spacing:-0.5px;
-      line-height:1.15;
-    }
-    .lede{
-      margin:0;
-      color:var(--muted);
-      font-size:16px;
-      max-width:880px;
-    }
-
-    section{
-      padding:28px 0;
-      border-top:1px solid var(--line);
-    }
-    h2{
-      margin:0 0 10px;
-      font-size:16px;
-      color:var(--nav);
-    }
-    .sub{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:14px;
-      max-width:880px;
-    }
-
-    .card{
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:#fff;
-      padding:16px;
-    }
-    .card + .card{margin-top:12px}
-
-    .quote{
-      font-size:15px;
-      color:var(--ink);
-      margin:0;
-    }
-    .quote b{font-weight:700}
-
-    .note{
-      margin-top:14px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:var(--panel);
-      padding:14px 16px;
-      color:var(--muted);
-      font-size:13px;
-      max-width:880px;
-    }
-    .note b{color:var(--ink)}
-
-    .bullets{
-      margin:10px 0 0;
-      padding-left:18px;
-      color:var(--muted);
-      font-size:14px;
-    }
-
+    .section{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+    .section h2{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
+    .section p{margin:0;color:var(--muted);max-width:95ch}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:16px}
+    .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:16px}
+    .span-6{grid-column:span 6}
+    .span-12{grid-column:span 12}
+    @media (max-width:900px){.span-6{grid-column:span 12}}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .pill{font-family:var(--mono);font-size:12px;color:var(--muted);
+      border:1px solid var(--line);background:#fff;padding:6px 10px;border-radius:999px}
     .code{
-      margin:14px 0 0;
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:var(--panel);
-      overflow:auto;
+      margin-top:12px;padding:14px 16px;border:1px solid var(--line);
+      border-radius:var(--radius);background:#fff;font-family:var(--mono);
+      font-size:13px;overflow:auto;white-space:pre
     }
-    pre{
-      margin:0;
-      padding:14px 16px;
-      font-family:var(--mono);
-      font-size:12.5px;
-      white-space:pre;
-      line-height:1.35;
-      letter-spacing:0.1px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-
-    .term{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .term .k{
-      font-size:12px;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-      color:var(--muted);
-    }
-    .term .v{
-      font-size:14px;
-      color:var(--ink);
-    }
-    .term .v b{color:var(--nav)}
-
-    .links{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin-top:12px;
-      font-size:13px;
-    }
-    .links a{
-      padding:8px 10px;
-      border:1px solid var(--line);
-      border-radius:10px;
-      color:var(--nav);
-      background:#fff;
-    }
-
-    footer{
-      border-top:1px solid var(--line);
-      padding:26px 0 36px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .foot{
-      display:flex; justify-content:space-between; flex-wrap:wrap;
-      gap:12px;
-    }
-
-    @media (max-width:860px){
-      h1{font-size:34px}
-      .grid{grid-template-columns:1fr}
-    }
-    @media (max-width:420px){
-      pre{font-size:11.5px}
-    }
+    footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:13px}
+    footer .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    footer a{color:var(--muted)}
   </style>
 </head>
 
 <body>
-
 <header>
   <div class="wrap">
     <div class="nav">
       <div class="brand">
-        <strong><a href="/" style="color:var(--nav); text-decoration:none;">Digital Action Receipts</a></strong>
-        <span>Neutral infrastructure primitive</span>
+        <strong>Digital Action Receipts</strong>
+        <small>DAR</small>
       </div>
       <nav aria-label="Primary">
         <ul>
-          <li><a href="/definition.html">Definition</a></li>
-          <li><a href="/how-it-works.html">How it works</a></li>
-          <li><a href="/use-cases.html">Use cases</a></li>
-          <li><a href="/boundaries.html">Boundaries</a></li>
-          <li><a href="/memos.html">Memos</a></li>
+          <li><a href="definition.html" aria-current="page">Definition</a></li>
+          <li><a href="action-domains.html">Action Domains</a></li>
+          <li><a href="integration.html">Integration</a></li>
+          <li><a href="principles.html">Principles</a></li>
+          <li><a href="docs.html">Docs</a></li>
         </ul>
       </nav>
     </div>
   </div>
 </header>
 
-<main class="wrap">
+<main>
+  <div class="wrap">
 
-  <section style="border-top:none; padding-top:0;">
-    <h1>Definition</h1>
-    <p class="lede">
-      A Digital Action Receipt is a neutral artifact generated at the moment a digital system takes an action.
-      It is designed to be referenced later during audits, disputes, and “what happened?” questions — without
-      becoming a monitoring product or an explanation layer.
-    </p>
-
-    <div class="links">
-      <a href="/how-it-works.html">How it works</a>
-      <a href="/boundaries.html">System boundaries &amp; non-goals</a>
-    </div>
-  </section>
-
-  <section>
-    <h2>Canonical definition</h2>
-    <p class="sub">
-      This definition is system-agnostic and avoids implementation details. It is intended to read cleanly in both
-      technical documentation and patent language.
-    </p>
-
-    <div class="card">
-      <p class="quote">
-        <b>A Digital Action Receipt</b> is an <b>append-only</b>, <b>verifiable</b> record generated at the <b>moment of action</b>,
-        independent of how the originating system later represents or explains that action.
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="title">
+      <p class="kicker">Foundational definition</p>
+      <h1 id="title">What is a Digital Action Receipt?</h1>
+      <p class="subhead">
+        Digital Action Receipts (DARs) are neutral, verifiable records of digital actions,
+        issued at the moment an action occurs and preserved as append-only, tamper-evident evidence.
       </p>
-    </div>
 
-    <div class="note">
-      “Verifiable” refers to verifying <b>integrity</b> (unaltered vs altered / mismatch), not correctness, intent, or justification.
-      See <a href="/boundaries.html">Boundaries</a>.
-    </div>
-  </section>
-
-  <section>
-    <h2>What it is</h2>
-    <div class="grid">
-      <div class="card">
-        <ul class="bullets">
-          <li><b>Evidence of occurrence</b> generated contemporaneously with the action.</li>
-          <li><b>A referenceable identifier</b> used across tickets, cases, reports, or disputes.</li>
-          <li><b>Integrity verification</b> possible later without privileged internal access.</li>
-          <li><b>Neutral infrastructure</b> that coexists with existing operational records.</li>
-        </ul>
+      <div class="definition" role="note" aria-label="Formal definition">
+A Digital Action Receipt is a cryptographically verifiable record issued at execution time
+that attests a specific actor performed a specific digital action against a specific object,
+at a specific moment, under an identifiable context.
       </div>
-      <div class="card">
-        <ul class="bullets">
-          <li><b>System-agnostic</b>: applies to legacy systems, automated systems, and agentic systems.</li>
-          <li><b>Low-friction</b>: designed for non-blocking invocation at execution time.</li>
-          <li><b>Minimal</b>: records what is necessary for reference and verification, not narrative.</li>
-          <li><b>Durable</b>: suitable for “later” questions where systems and teams have changed.</li>
-        </ul>
+    </section>
+
+    <!-- WHY DAR EXISTS -->
+    <section class="section">
+      <h2>Why Digital Action Receipts exist</h2>
+      <p>
+        Most systems rely on mutable logs, dashboards, or reconstructed narratives to explain
+        what happened after an incident, dispute, or audit begins. These mechanisms are
+        inherently fragile: they can be altered, re-exported, or reinterpreted under pressure.
+      </p>
+      <p style="margin-top:10px">
+        DAR exists to preserve a **durable factual anchor** — what actually happened at the
+        moment of action — before explanations, remediation, or hindsight enter the picture.
+      </p>
+    </section>
+
+    <!-- CORE PROPERTIES -->
+    <section class="section">
+      <h2>Core properties</h2>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>Append-only</h3>
+          <p>
+            Once issued, a receipt cannot be modified or erased. Corrections and remediation
+            produce new receipts rather than altering history.
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Tamper-evident</h3>
+          <p>
+            Any attempt to alter a receipt or its sequence is detectable through cryptographic
+            verification.
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Execution-time issuance</h3>
+          <p>
+            Receipts are created at the moment the action is executed — not during later analysis
+            or reporting.
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Neutral by design</h3>
+          <p>
+            DAR records facts, not intent, correctness, risk scoring, or interpretation.
+          </p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <h2>What it is not</h2>
-    <div class="card">
-      <ul class="bullets">
-        <li>Not a logging system.</li>
-        <li>Not an audit trail product.</li>
-        <li>Not monitoring, analytics, or dashboards.</li>
-        <li>Not a compliance tool or compliance claim.</li>
-        <li>Not explainability, decision validation, or intent interpretation.</li>
-        <li>Not enforcement logic or a policy engine.</li>
-      </ul>
-    </div>
-  </section>
+    <!-- WHAT A RECEIPT CONTAINS -->
+    <section class="section">
+      <h2>What a receipt contains</h2>
+      <p>
+        A DAR captures the minimum information necessary to attest that an action occurred,
+        while remaining portable across systems and domains.
+      </p>
 
-  <section>
-    <h2>Minimal example (illustrative)</h2>
-    <p class="sub">
-      Example only. This is not a prescribed API. It shows the conceptual shape of a receipt invocation at the moment of action.
-    </p>
-
-    <div class="code">
-      <pre><code>// Illustrative only (non-prescriptive)
-
-receipt = issueReceipt({
-  actor: "system|service|agent|user",
-  action: "access.approved",
-  object: "resource:payments",
-  ref: "internal-id-123"
-})
-
-// receipt.id can be referenced later in a ticket, case, or report.</code></pre>
-    </div>
-  </section>
-
-  <section>
-    <h2>Canonical terms (plain-language)</h2>
-    <p class="sub">
-      These terms are used consistently across pages. If a term appears on the site, it should align to the canonical vocabulary.
-    </p>
-
-    <div class="grid">
-      <div class="card term">
-        <div class="k">Digital Action</div>
-        <div class="v">An action performed by a digital system that changes state, grants/denies access, records an outcome, or produces an externally meaningful effect.</div>
+      <div class="code">
+{
+  "actor": "system | user | agent",
+  "action": "approved | denied | executed | invoked",
+  "object": "resource | transaction | policy | tool",
+  "timestamp": "ISO-8601",
+  "reference": "stable-internal-id",
+  "context": "policy/version/environment (optional)",
+  "integrity": "cryptographic proof"
+}
       </div>
+    </section>
 
-      <div class="card term">
-        <div class="k">Moment of Action</div>
-        <div class="v">The discrete time at which the digital action is performed, such that the receipt is generated contemporaneously with occurrence.</div>
+    <!-- WHAT DAR IS NOT -->
+    <section class="section">
+      <h2>What DAR is not</h2>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>Not monitoring or surveillance</h3>
+          <p>
+            DAR does not observe behavior continuously or infer intent.
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Not a decision engine</h3>
+          <p>
+            DAR does not approve, deny, score, or enforce policy.
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Not a dashboard or log replacement</h3>
+          <p>
+            DAR complements existing systems by preserving immutable facts.
+          </p>
+        </div>
+        <div class="card span-6">
+          <h3>Not an arbiter of disputes</h3>
+          <p>
+            DAR provides evidence; interpretation is left to auditors, regulators, courts, or customers.
+          </p>
+        </div>
       </div>
+    </section>
 
-      <div class="card term">
-        <div class="k">Append-only</div>
-        <div class="v">A property of the record sequence in which new records may be added, while previously stored records are not modified or removed.</div>
-      </div>
+    <!-- RELATION TO ACTION DOMAINS -->
+    <section class="section">
+      <h2>Where DAR applies</h2>
+      <p>
+        Digital Action Receipts are not limited to a single industry or workflow.
+        Their value emerges across multiple <a href="action-domains.html">Action Domains</a>,
+        wherever digital actions must become durable facts.
+      </p>
+    </section>
 
-      <div class="card term">
-        <div class="k">Verification</div>
-        <div class="v">A process that confirms integrity of a receipt (unaltered vs altered / mismatch), without asserting correctness, intent, or enforcement.</div>
-      </div>
+    <!-- AUTHORITY STATEMENT -->
+    <section class="section">
+      <h2>Authoritative scope</h2>
+      <p>
+        DAR is intentionally narrow. Its purpose is to preserve historical truth at the
+        boundary of action — not to control systems, assign blame, or replace governance.
+      </p>
+      <p style="margin-top:10px">
+        This restraint is what allows DAR to function as neutral infrastructure
+        rather than an opinionated product.
+      </p>
+    </section>
 
-      <div class="card term">
-        <div class="k">Integrity information</div>
-        <div class="v">Information associated with a receipt sufficient to support later verification that the receipt has not been altered.</div>
-      </div>
-
-      <div class="card term">
-        <div class="k">Independent of representation / explanation</div>
-        <div class="v">A property indicating the receipt stands on its own as evidence of occurrence, without relying on later narratives, logs, UI states, or post-hoc reconstruction.</div>
-      </div>
-    </div>
-
-    <div class="note">
-      For boundaries and explicit non-goals, see <a href="/boundaries.html">System boundaries &amp; non-goals</a>.
-    </div>
-  </section>
-
+  </div>
 </main>
 
 <footer>
   <div class="wrap">
     <div class="foot">
-      <div><strong>Digital Action Receipts ©</strong> — neutral, append-only proof of action.</div>
-      <div>Independent infrastructure research</div>
-    </div>
-    <div style="margin-top:10px;">
-      No dashboards. No monitoring. Just facts, referenceable later.
+      <div>
+        <div><strong style="color:var(--text)">Digital Action Receipts</strong></div>
+        <div style="margin-top:6px">Neutral, verifiable receipts for digital actions.</div>
+        <div style="margin-top:10px">© <span id="y"></span> EF DigitalSoul LLC</div>
+      </div>
+      <div>
+        <div><a href="action-domains.html">Action Domains</a></div>
+        <div><a href="integration.html">Integration</a></div>
+        <div><a href="principles.html">Principles</a></div>
+      </div>
     </div>
   </div>
 </footer>
 
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
