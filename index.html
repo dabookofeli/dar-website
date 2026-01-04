@@ -3,526 +3,385 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Digital Action Receipts (DAR) — Verifiable receipts for digital actions</title>
-  <meta name="description" content="Digital Action Receipts (DAR) are issued at action time and stored in customer-controlled immutable storage. A neutral evidence layer for disputes, audits, and investigations." />
+  <title>Digital Action Receipts (DAR) — Customer-Owned Proof of Action</title>
+  <meta name="description" content="Digital Action Receipts provide cryptographically verifiable proof that a digital action occurred, preserved in customer-controlled immutable storage." />
+  <meta name="theme-color" content="#0B1220" />
 
   <style>
     :root{
-      --bg:#ffffff;
-      --ink:#0b1220;
-      --muted:#4b5563;
-      --soft:#f5f7fb;
-      --card:#f7f9fc;
-      --line:#e6eaf2;
-      --accent:#2563eb;
-      --accent2:#0ea5a4;
-      --shadow:0 10px 30px rgba(15,23,42,.06);
-      --radius:18px;
-      --max:1080px;
+      --bg:#0B1220;
+      --panel:#0F1A33;
+      --card:#0E1730;
+      --text:#E7ECF6;
+      --muted:#AAB6D3;
+      --line:rgba(231,236,246,.12);
+      --accent:#7AA7FF;
+      --accent2:#67E8F9;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius2: 22px;
+      --max: 1120px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     }
-
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family:var(--sans);
+      background: radial-gradient(1200px 600px at 12% 0%, rgba(122,167,255,.22), transparent 55%),
+                  radial-gradient(900px 500px at 85% 10%, rgba(103,232,249,.12), transparent 50%),
+                  var(--bg);
+      color:var(--text);
       line-height:1.45;
     }
-
     a{color:inherit; text-decoration:none}
-    a:hover{color:var(--accent)}
-    .wrap{max-width:var(--max); margin:0 auto; padding:24px 18px 60px}
-
-    /* Top Nav */
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      background: rgba(11,18,32,.72);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
     .nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-      padding:10px 0 22px;
-      position:relative;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:14px 0;
     }
     .brand{
-      display:flex; align-items:baseline; gap:10px;
-      font-weight:800;
-      letter-spacing:-.02em;
-      white-space:nowrap;
+      display:flex; align-items:center; gap:10px;
+      font-weight:700; letter-spacing:.2px;
     }
-    .brand small{
-      font-weight:700;
-      color:var(--muted);
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:12px;
+    .mark{
+      width:34px; height:34px; border-radius:10px;
+      background: linear-gradient(135deg, rgba(122,167,255,.95), rgba(103,232,249,.75));
+      box-shadow: 0 10px 28px rgba(122,167,255,.18);
     }
-
-    /* Desktop links */
-    .navlinks{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    .navlinks{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+    .navlinks a{
+      font-size:14px; color:var(--muted);
+      padding:8px 10px; border-radius:10px;
     }
-    .pill{
-      padding:10px 14px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      font-weight:700;
-      color:var(--muted);
-      background:#fff;
-    }
-    .pill.primary{
-      background:var(--soft);
-      color:var(--ink);
-      border-color:var(--line);
-    }
-
-    /* Mobile menu button */
-    .menuBtn{
-      display:none;
-      align-items:center;
-      justify-content:center;
-      width:44px;
-      height:44px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      cursor:pointer;
-      color:var(--ink);
-    }
-    .menuIcon{
-      width:18px; height:12px; position:relative;
-    }
-    .menuIcon span{
-      position:absolute; left:0; right:0;
-      height:2px; border-radius:2px;
-      background:var(--ink);
-      opacity:.9;
-    }
-    .menuIcon span:nth-child(1){top:0}
-    .menuIcon span:nth-child(2){top:5px}
-    .menuIcon span:nth-child(3){top:10px}
-
-    /* Mobile nav panel */
-    .mobilePanel{
-      display:none;
-      position:absolute;
-      right:0;
-      top:62px;
-      width:min(360px, calc(100vw - 18px));
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      padding:10px;
-      z-index:50;
-    }
-    .mobilePanel a{
-      display:block;
-      padding:12px 12px;
-      border-radius:12px;
-      font-weight:800;
-      color:var(--ink);
-    }
-    .mobilePanel a:hover{background:var(--soft)}
-    .mobilePanel .mutedRow{
-      padding:8px 12px;
-      color:var(--muted);
-      font-size:12px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      font-weight:800;
-    }
-
-    @media (max-width:820px){
-      .navlinks{display:none;}
-      .menuBtn{display:inline-flex;}
-    }
-    .mobileOpen .mobilePanel{display:block;}
-
-    /* Hero */
-    .kicker{
-      font-size:12px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--muted);
-      margin-top:10px;
-    }
-    h1{
-      font-size:54px;
-      line-height:1.02;
-      letter-spacing:-.04em;
-      margin:14px 0 12px;
-    }
-    .subcopy{
-      font-size:18px;
-      color:var(--muted);
-      max-width:760px;
-      margin:0 0 18px;
-    }
-    .subcopy strong{color:var(--ink); font-weight:800}
-    .ctaRow{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin:18px 0 26px;
+    .navlinks a:hover{background:rgba(231,236,246,.06); color:var(--text)}
+    .cta{
+      display:flex; align-items:center; gap:10px;
     }
     .btn{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:12px 16px;
-      border-radius:999px;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 14px; border-radius:12px;
       border:1px solid var(--line);
-      background:#fff;
-      font-weight:900;
-      color:var(--ink);
-      box-shadow: 0 1px 0 rgba(15,23,42,.02);
+      background: rgba(231,236,246,.06);
+      color:var(--text);
+      font-size:14px; font-weight:600;
       cursor:pointer;
     }
+    .btn:hover{background: rgba(231,236,246,.10)}
     .btn.primary{
-      background:var(--ink);
-      color:#fff;
-      border-color:transparent;
-    }
-    .btn.secondary{
-      background:var(--soft);
-      color:var(--ink);
+      border-color: rgba(122,167,255,.45);
+      background: linear-gradient(135deg, rgba(122,167,255,.25), rgba(103,232,249,.14));
     }
 
-    /* Cards / sections */
-    .grid{
+    .hero{padding:70px 0 28px}
+    .hero-grid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:18px;
-      align-items:start;
+      grid-template-columns: 1.12fr .88fr;
+      gap:26px;
+      align-items:stretch;
     }
-    @media (max-width:900px){
-      h1{font-size:42px}
-      .grid{grid-template-columns:1fr}
+    @media (max-width: 920px){
+      .hero-grid{grid-template-columns:1fr}
     }
-
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border:1px solid var(--line);
+      border-radius:999px; color:var(--muted);
+      font-size:13px; background: rgba(231,236,246,.04);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(103,232,249,.14);
+    }
+    h1{
+      margin:16px 0 14px;
+      font-size:46px; line-height:1.06;
+      letter-spacing:-.6px;
+    }
+    @media (max-width: 520px){
+      h1{font-size:38px}
+    }
+    .lead{color:var(--muted); font-size:18px; max-width: 62ch}
+    .hero-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+    .note{
+      margin-top:16px;
+      color:var(--muted); font-size:13px;
+    }
+    .panel{
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(15,26,51,.78), rgba(14,23,48,.78));
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .panel h3{margin:0 0 10px; font-size:16px}
+    .panel p{margin:0; color:var(--muted); font-size:14px}
+    .kvs{display:grid; gap:10px; margin-top:14px}
+    .kv{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px;
+      background: rgba(231,236,246,.04);
+    }
+    .kv .k{font-size:12px; color:var(--muted); margin-bottom:6px}
+    .kv .v{font-size:14px; color:var(--text)}
+    .kv .v code{font-family:var(--mono); font-size:12px; color:rgba(231,236,246,.92)}
+    .section{padding:34px 0}
+    .section h2{margin:0 0 10px; font-size:22px; letter-spacing:-.2px}
+    .sub{margin:0; color:var(--muted); max-width:78ch}
+    .cards{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 920px){ .cards{grid-template-columns:1fr} }
     .card{
-      background:var(--card);
       border:1px solid var(--line);
-      border-radius:var(--radius);
+      border-radius: var(--radius);
+      padding:16px;
+      background: rgba(231,236,246,.04);
+    }
+    .card h3{margin:0 0 8px; font-size:15px}
+    .card p{margin:0; color:var(--muted); font-size:14px}
+    .flow{
+      margin-top:18px;
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      background: rgba(231,236,246,.03);
       padding:18px;
-      box-shadow:var(--shadow);
-    }
-    .card h2, .card h3{
-      margin:0 0 10px;
-      letter-spacing:-.02em;
-    }
-    .card p{margin:0 0 10px; color:var(--muted)}
-    .mono{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:14px;
-      color:#111827;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:14px;
-      overflow:auto;
-    }
-
-    .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-    .chip{
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13px;
-    }
-
-    .section{margin-top:28px}
-    .sectionTitle{
-      font-size:22px;
-      letter-spacing:-.02em;
-      margin:0 0 12px;
-      font-weight:900;
-    }
-    .bullets{
-      margin:0;
-      padding-left:18px;
-      color:var(--muted);
-    }
-    .bullets li{margin:8px 0}
-    .bullets strong{color:var(--ink)}
-
-    /* Philosophy callout */
-    .callout{
-      background:linear-gradient(180deg, rgba(37,99,235,.07), rgba(14,165,164,.05));
-      border:1px solid rgba(37,99,235,.18);
-      border-radius:var(--radius);
-      padding:18px;
-    }
-    .callout strong{color:var(--ink)}
-    .small{font-size:13px; color:var(--muted); font-weight:650}
-
-    /* Diagram toggle */
-    summary{
-      list-style:none;
-      cursor:pointer;
-      user-select:none;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 14px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:#fff;
-      font-weight:900;
-      color:var(--ink);
-      width:max-content;
-      max-width:100%;
-    }
-    summary::-webkit-details-marker{display:none}
-    .chev{
-      width:10px; height:10px;
-      border-right:2px solid var(--muted);
-      border-bottom:2px solid var(--muted);
-      transform:rotate(-45deg);
-      margin-left:4px;
-    }
-    details[open] .chev{transform:rotate(45deg)}
-    .diagramWrap{
-      margin-top:12px;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:#fff;
-      padding:14px;
       overflow:hidden;
     }
-    .diagramWrap img{
-      width:100%;
-      height:auto;
-      display:block;
-      border-radius:12px;
+    .flow-row{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:12px;
     }
-    .caption{margin-top:10px; font-size:13px; color:var(--muted); font-weight:650}
-
-    /* Footer */
+    @media (max-width: 920px){ .flow-row{grid-template-columns:1fr} }
+    .step{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:14px;
+      background: rgba(15,26,51,.55);
+    }
+    .step .n{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:26px; height:26px; border-radius:9px;
+      border:1px solid rgba(122,167,255,.45);
+      background: rgba(122,167,255,.12);
+      font-weight:700; font-size:13px; margin-bottom:10px;
+    }
+    .step .t{font-weight:700; font-size:14px; margin-bottom:6px}
+    .step .d{color:var(--muted); font-size:13px}
+    .callout{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px dashed rgba(122,167,255,.38);
+      background: rgba(122,167,255,.08);
+      color: rgba(231,236,246,.92);
+      font-size:13px;
+    }
     .footer{
-      margin-top:44px;
-      padding-top:20px;
+      padding:34px 0 40px;
       border-top:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
+      margin-top:22px;
       color:var(--muted);
-      font-weight:750;
-      font-size:14px;
+      font-size:13px;
     }
-    .footer a{color:var(--muted)}
-    .footer strong{color:var(--ink)}
-    .footnote{
-      width:100%;
-      margin-top:6px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:650;
-    }
+    .footer a{color:rgba(231,236,246,.82)}
+    .footer a:hover{color:var(--text)}
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header class="nav" id="topNav">
-      <div class="brand">
-        <div>Digital Action Receipts</div>
-        <small>DAR</small>
-      </div>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="nav">
+        <a class="brand" href="/">
+          <span class="mark" aria-hidden="true"></span>
+          <span>Digital Action Receipts</span>
+        </a>
 
-      <!-- Desktop nav -->
-      <nav class="navlinks" aria-label="Primary navigation">
-        <a class="pill primary" href="index.html">Home</a>
-        <a class="pill" href="definition.html">Definition</a>
-        <a class="pill" href="action-domains.html">Action Domains</a>
-        <a class="pill" href="integration.html">Integration</a>
-        <a class="pill" href="principles.html">Principles</a>
-        <a class="pill" href="docs.html">Docs</a>
-      </nav>
+        <!-- UPDATED NAV: Integration removed -->
+        <nav class="navlinks" aria-label="Primary">
+          <a href="/definition.html">Definition</a>
+          <a href="/action-domains.html">Action Domains</a>
+          <a href="/principles.html">Principles</a>
+          <a href="/docs.html">Docs</a>
+        </nav>
 
-      <!-- Mobile menu button -->
-      <button class="menuBtn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobilePanel">
-        <div class="menuIcon" aria-hidden="true">
-          <span></span><span></span><span></span>
+        <div class="cta">
+          <a class="btn primary" href="/docs.html#access">Request Integration Access</a>
         </div>
-      </button>
-
-      <!-- Mobile panel -->
-      <div class="mobilePanel" id="mobilePanel" role="menu" aria-label="Mobile navigation">
-        <div class="mutedRow">Menu</div>
-        <a role="menuitem" href="index.html">Home</a>
-        <a role="menuitem" href="definition.html">Definition</a>
-        <a role="menuitem" href="action-domains.html">Action Domains</a>
-        <a role="menuitem" href="integration.html">Integration</a>
-        <a role="menuitem" href="principles.html">Principles</a>
-        <a role="menuitem" href="docs.html">Docs</a>
-      </div>
-    </header>
-
-    <!-- HERO -->
-    <div class="kicker">Neutral infrastructure primitive</div>
-    <h1>The receipt is the authority for digital actions.</h1>
-    <p class="subcopy">
-      Digital Action Receipts (DARs) are issued <strong>at action time</strong> and preserved as append-only,
-      tamper-evident evidence in <strong>customer-controlled storage</strong>.
-      When systems are questioned later, logs and narratives drift. Receipts establish what happened.
-    </p>
-
-    <div class="ctaRow">
-      <a class="btn primary" href="definition.html">Read the formal definition →</a>
-      <a class="btn secondary" href="boundaries.html">See invariants & non-goals →</a>
-    </div>
-
-    <!-- FIRST ROW: definition + quick concept -->
-    <div class="grid">
-      <div class="card">
-        <h2>DAR, in one sentence</h2>
-        <p>
-          A DAR is a small, durable artifact that proves a specific action occurred — by a specific actor —
-          against a specific object — at a specific time — under a specific policy/config context.
-        </p>
-
-        <div class="mono">
-DAR = verifiable, append-only evidence of a digital action, issued at execution time.
-Preserves: actor · action · object · timestamp · stable reference · policy/context (optional) · integrity proof
-        </div>
-
-        <div class="chips" aria-label="tags">
-          <span class="chip">append-only</span>
-          <span class="chip">tamper-evident</span>
-          <span class="chip">independently verifiable</span>
-          <span class="chip">customer custody</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Dead-simple integration (concept)</h3>
-        <p>Issue a receipt at the action boundary and attach a stable reference. Store it append-only. Verify later.</p>
-        <div class="mono">
-await issueReceipt({
-  actor: "system|user|agent",
-  action: "approved",
-  object: "loan_application",
-  ref: "internal-id-123",
-  policy_version_ref: "policy-2026-01",
-  model_version_hash: "sha256:…",
-  config_ref: "cfg-9a2f…"
-})
-        </div>
-        <p class="small">Write-heavy, read-light. Optimized for issuance at scale and verification on demand.</p>
       </div>
     </div>
-
-    <!-- PHILOSOPHY -->
-    <section class="section" id="philosophy">
-      <h2 class="sectionTitle">Why this philosophy matters</h2>
-      <div class="callout">
-        <strong>In disputes, audits, and investigations, the system is not the witness. The receipt is.</strong>
-        <div class="small" style="margin-top:8px;">
-          DAR does not replace systems of record. DAR replaces reconstruction.
-          It preserves facts at the moment of action — without monitoring, interpreting, or enforcing behavior.
-        </div>
-      </div>
-    </section>
-
-    <!-- DIAGRAM (HIDDEN BEHIND BUTTON) -->
-    <section class="section" id="visual">
-      <h2 class="sectionTitle">Universal Evidence Layer</h2>
-      <p class="subcopy" style="margin-bottom:10px;">
-        DAR sits beneath many systems as a shared evidence fabric — quietly recording what happened, when it happened,
-        and under what context — without controlling decisions.
-      </p>
-
-      <details>
-        <summary>
-          View diagram
-          <span class="chev" aria-hidden="true"></span>
-        </summary>
-
-        <div class="diagramWrap">
-          <img
-            src="assets/dar-universal-evidence-layer.png"
-            alt="Digital Action Receipts (DAR) — A Universal Evidence Layer"
-            loading="lazy"
-          />
-          <div class="caption">
-            Customer-controlled storage. Receipts store references (policy versions, model hashes, config refs) — not raw data.
-          </div>
-        </div>
-      </details>
-    </section>
-
-    <!-- HOW IT FITS -->
-    <section class="section" id="fits">
-      <h2 class="sectionTitle">How DAR fits into existing systems</h2>
-      <div class="card">
-        <ul class="bullets">
-          <li><strong>Receipts are issued at action time</strong>, not reconstructed later.</li>
-          <li><strong>Receipts are stored in customer-owned infrastructure</strong> (immutable / append-only).</li>
-          <li><strong>Unlike logs</strong>, receipts are independently verifiable and portable.</li>
-          <li><strong>No surveillance.</strong> No monitoring. No decision logic. No enforcement.</li>
-        </ul>
-        <div class="ctaRow" style="margin-top:14px;">
-          <a class="btn secondary" href="integration.html">Integration patterns →</a>
-          <a class="btn secondary" href="action-domains.html">Explore action domains →</a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div>
-        <strong>© EF Digital Sol</strong>
-        <span class="small" style="margin-left:10px;">Digital Action Receipts (DAR)</span>
-        <div class="footnote">Neutral, verifiable receipts for digital actions.</div>
-      </div>
-      <div style="display:flex; gap:14px; flex-wrap:wrap;">
-        <a href="definition.html">Definition</a>
-        <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
-        <a href="principles.html">Principles</a>
-        <a href="docs.html">Docs</a>
-      </div>
-    </footer>
   </div>
 
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Customer-owned proof of digital actions</div>
+            <h1>Proof that an action occurred — independent, verifiable, and durable.</h1>
+            <p class="lead">
+              Digital Action Receipts (DAR) are cryptographically verifiable, append-only evidence that an action occurred at execution time,
+              preserved in customer-controlled immutable storage.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn primary" href="/docs.html#access">Request Integration Access</a>
+              <a class="btn" href="/definition.html">Read the Definition</a>
+            </div>
+
+            <p class="note">
+              DAR is not monitoring, logging, or observability. It’s evidence designed for audit, dispute, and continuity.
+            </p>
+          </div>
+
+          <aside class="panel">
+            <h3>What DAR provides</h3>
+            <p>Receipts bind key facts at action time so you can prove what happened later.</p>
+
+            <div class="kvs">
+              <div class="kv">
+                <div class="k">Evidence primitive</div>
+                <div class="v">Signed receipt at the <code>action boundary</code> (commit time)</div>
+              </div>
+              <div class="kv">
+                <div class="k">Customer custody</div>
+                <div class="v">Stored in customer-controlled <code>immutable storage</code></div>
+              </div>
+              <div class="kv">
+                <div class="k">Independent verification</div>
+                <div class="v">Verify without trusting the application that produced the action</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>How it works (conceptual)</h2>
+        <p class="sub">
+          Integrators issue a receipt after a meaningful action completes, then persist it immutably.
+          Implementation details (schemas, SDKs, endpoints) are provided in gated documentation after access approval.
+        </p>
+
+        <!-- UPDATED: no code snippets; only conceptual steps -->
+        <div class="flow">
+          <div class="flow-row">
+            <div class="step">
+              <div class="n">1</div>
+              <div class="t">Action completes</div>
+              <div class="d">A system, user, or agent performs a meaningful operation.</div>
+            </div>
+            <div class="step">
+              <div class="n">2</div>
+              <div class="t">Receipt is issued</div>
+              <div class="d">A receipt is generated and cryptographically signed at execution time.</div>
+            </div>
+            <div class="step">
+              <div class="n">3</div>
+              <div class="t">Receipt is archived</div>
+              <div class="d">Your system persists the receipt to customer-controlled immutable storage.</div>
+            </div>
+            <div class="step">
+              <div class="n">4</div>
+              <div class="t">Receipt is verified</div>
+              <div class="d">Later, the receipt can be verified independently for audit or dispute.</div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>Storage responsibility:</strong> DAR returns a signed receipt. Your system archives it.
+            DAR does not write into customer infrastructure by default.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>What DAR is for</h2>
+        <p class="sub">
+          DAR is designed for systems where trust, continuity, and accountability matter — especially when actions are executed by software,
+          agents, or distributed teams.
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>Audit continuity</h3>
+            <p>Provide durable evidence of what occurred, even when systems change or logs are incomplete.</p>
+          </div>
+          <div class="card">
+            <h3>Dispute evidence</h3>
+            <p>Resolve “what happened?” by referencing independently verifiable receipts.</p>
+          </div>
+          <div class="card">
+            <h3>Agent actions</h3>
+            <p>Bind AI/agent tool calls and outcomes to proof at execution time without relying on narrative logs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Integration access</h2>
+        <p class="sub">
+          Integration kits (SDKs, schemas, API reference, verification utilities) are available after access approval.
+          This keeps operational details controlled while allowing engineers to integrate quickly once onboarded.
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>What you get</h3>
+            <p>Quickstart, OpenAPI reference, receipt schema, verification guide, storage playbooks, and SDK examples.</p>
+          </div>
+          <div class="card">
+            <h3>What stays public</h3>
+            <p>Definition, principles, and conceptual system fit — enough to evaluate, not enough to clone.</p>
+          </div>
+          <div class="card">
+            <h3>Request access</h3>
+            <p>Use the Docs page to request access and receive onboarding steps.</p>
+            <p style="margin-top:12px;">
+              <a class="btn primary" href="/docs.html#access">Request Integration Access</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <footer class="footer">
+        <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center;">
+          <div>© <span id="year"></span> Digital Action Receipts</div>
+          <div style="display:flex; gap:14px; flex-wrap:wrap;">
+            <a href="/definition.html">Definition</a>
+            <a href="/action-domains.html">Action Domains</a>
+            <a href="/principles.html">Principles</a>
+            <a href="/docs.html">Docs</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+
   <script>
-    // Mobile menu toggle + close behaviors (click outside / ESC)
-    (function () {
-      const topNav = document.getElementById('topNav');
-      const btn = document.getElementById('menuBtn');
-      const panel = document.getElementById('mobilePanel');
-
-      function setOpen(open) {
-        if (open) topNav.classList.add('mobileOpen');
-        else topNav.classList.remove('mobileOpen');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      }
-
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const open = topNav.classList.contains('mobileOpen');
-        setOpen(!open);
-      });
-
-      // Close if clicking outside
-      document.addEventListener('click', function (e) {
-        if (!topNav.classList.contains('mobileOpen')) return;
-        if (panel.contains(e.target) || btn.contains(e.target)) return;
-        setOpen(false);
-      });
-
-      // Close on ESC
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') setOpen(false);
-      });
-
-      // Close after clicking a menu link
-      panel.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => setOpen(false));
-      });
-    })();
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
