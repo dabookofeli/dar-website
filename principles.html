@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Principles — Digital Action Receipts (DAR)</title>
-  <meta name="description" content="Core principles, invariants, and non-goals of Digital Action Receipts (DAR): evidence not telemetry, customer custody, independent verification, minimalism, and boundaries." />
+  <meta name="description" content="DAR principles: invariants, boundaries, and non-goals that keep Digital Action Receipts narrow, customer-custodied, and independently verifiable." />
 
   <style>
     :root{
@@ -19,7 +19,6 @@
       --radius:16px;
       --radius2:22px;
       --max: 1040px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
     *{ box-sizing:border-box; }
@@ -97,9 +96,7 @@
       font-weight:650;
       color:var(--text);
     }
-    .menuIcon{
-      width:18px; height:12px; position:relative;
-    }
+    .menuIcon{ width:18px; height:12px; position:relative; }
     .menuIcon span{
       position:absolute; left:0; right:0;
       height:2px; border-radius:2px;
@@ -160,7 +157,7 @@
     .lede{
       color:var(--muted);
       font-size:18px;
-      max-width:78ch;
+      max-width:80ch;
     }
 
     .card{
@@ -177,8 +174,6 @@
       letter-spacing:-0.01em;
     }
     .small{ font-size:13px; color:var(--muted2); }
-    ul{ margin:10px 0 0 18px; color:var(--muted); }
-    li{ margin:6px 0; }
 
     .grid2{
       margin-top:18px;
@@ -191,6 +186,25 @@
       .grid2{ grid-template-columns:1fr; }
     }
 
+    ul{ margin:10px 0 0 18px; color:var(--muted); }
+    li{ margin:6px 0; }
+
+    .pillRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .pill{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:13px;
+      font-weight:650;
+      color:var(--muted);
+    }
+
     .callout{
       background:linear-gradient(180deg, rgba(37,99,235,0.06), rgba(14,165,233,0.04));
       border:1px solid rgba(37,99,235,0.14);
@@ -198,17 +212,6 @@
       padding:16px;
     }
     .callout strong{ display:block; margin-bottom:6px; }
-
-    .codeBox{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px;
-      overflow:auto;
-      font-family:var(--mono);
-      font-size:13px;
-      color:#0f172a;
-    }
 
     /* Footer */
     .footer{
@@ -239,11 +242,11 @@
         Menu
       </button>
 
+      <!-- Integration removed -->
       <div class="navlinks" aria-label="Primary navigation">
         <a href="index.html">Home</a>
         <a href="definition.html">Definition</a>
         <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
         <a class="active" href="principles.html">Principles</a>
         <a href="docs.html">Docs</a>
       </div>
@@ -254,7 +257,6 @@
         <a href="index.html">Home</a>
         <a href="definition.html">Definition</a>
         <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
         <a class="active" href="principles.html">Principles</a>
         <a href="docs.html">Docs</a>
       </div>
@@ -274,18 +276,24 @@
       <div class="small">
         In disputes, audits, and investigations, the system is not the witness. The receipt is.
       </div>
+      <div class="pillRow" style="margin-top:12px;">
+        <span class="pill">evidence over narrative</span>
+        <span class="pill">customer custody</span>
+        <span class="pill">verifiable later</span>
+        <span class="pill">minimal by design</span>
+      </div>
     </div>
 
     <div class="section grid2">
       <div class="card">
         <h2>Invariants (must always be true)</h2>
         <ul>
-          <li><strong>Issued at action time</strong> — receipts are emitted after an action commits (non-blocking).</li>
-          <li><strong>Append-only</strong> — receipts are not editable; corrections are new receipts.</li>
-          <li><strong>Customer custody</strong> — receipts are stored in customer-controlled infrastructure.</li>
+          <li><strong>Issued at action time</strong> — emitted after an action commits (non-blocking).</li>
+          <li><strong>Append-only</strong> — receipts are not edited; corrections are new receipts.</li>
+          <li><strong>Customer custody</strong> — stored under customer control and retention.</li>
           <li><strong>Independent verification</strong> — integrity can be checked outside the issuing system.</li>
-          <li><strong>Minimal payload</strong> — store references (versions/hashes/refs), not raw data.</li>
-          <li><strong>Portable evidence</strong> — receipts remain meaningful across migrations and vendors.</li>
+          <li><strong>Minimal payload</strong> — store references to context, not sensitive content by default.</li>
+          <li><strong>Portable evidence</strong> — remains meaningful across migrations and vendors.</li>
         </ul>
       </div>
 
@@ -301,45 +309,45 @@
       </div>
     </div>
 
-    <div class="section grid2">
-      <div class="card">
-        <h2>Evidence over narrative</h2>
-        <p class="small">
-          Narratives change. Logs are internal. DAR is an externalizable artifact that persists facts.
-        </p>
-        <div class="codeBox">
-<code>Question later: "What happened?"
-DAR answers with a receipt + integrity proof + context references:
-  • actor · action · object · time
-  • policy_version_ref / model_version_hash / config_ref
-  • signature / hash chain pointers</code>
-        </div>
-      </div>
+    <div class="section card">
+      <h2>Evidence over narrative</h2>
+      <p class="small">
+        Narratives change. Logs are internal. DAR is an externalizable artifact that preserves facts.
+        When the question later becomes “what happened?”, DAR answers with a receipt that can be verified for integrity
+        and placed in a timeline alongside other receipts.
+      </p>
+      <ul>
+        <li>Evidence stays stable even when systems change.</li>
+        <li>Proof is anchored to the moment of action, not a later reconstruction.</li>
+        <li>Context can be referenced without copying private data into the receipt.</li>
+      </ul>
+    </div>
 
-      <div class="card">
-        <h2>Reference, don’t retain</h2>
-        <p class="small">
-          DAR preserves accountability without becoming a repository of private data.
-        </p>
-        <ul>
-          <li>Use <strong>policy_version_ref</strong> instead of storing policy text</li>
-          <li>Use <strong>model_version_hash</strong> instead of prompts/training data</li>
-          <li>Use <strong>config_ref</strong> instead of full configs</li>
-          <li>Store payloads only when explicitly required and governed</li>
-        </ul>
-      </div>
+    <div class="section card">
+      <h2>Reference, don’t retain</h2>
+      <p class="small">
+        DAR preserves accountability without becoming a repository of private data. When context matters, receipts point to it.
+      </p>
+      <ul>
+        <li>Reference governing rules and guidance rather than embedding them.</li>
+        <li>Reference model and configuration identifiers rather than copying prompts or configurations.</li>
+        <li>Store sensitive payloads only when explicitly required, governed, and scoped.</li>
+      </ul>
+      <p class="small" style="margin-top:10px;">
+        The practical goal: keep receipts lightweight and defensible.
+      </p>
     </div>
 
     <div class="section card">
       <h2>What “customer custody” means</h2>
       <p class="small">
-        Receipts are written into customer-controlled immutable storage. DAR can provide issuance/verification tooling,
-        but does not become the owner of the evidence.
+        Receipts should be written into storage controlled by the customer—under their retention policies and permissions.
+        DAR can provide issuance and verification tooling, but does not become the owner of the evidence.
       </p>
       <ul>
-        <li>AWS S3 Object Lock</li>
-        <li>Azure Immutable Blob</li>
-        <li>GCP Retention Bucket</li>
+        <li><strong>Customer-controlled</strong> location, retention, and access</li>
+        <li><strong>Write-protected</strong> / append-only retention where appropriate</li>
+        <li><strong>Portable</strong> evidence that survives vendor churn</li>
       </ul>
       <p class="small" style="margin-top:10px;">
         This prevents a core failure mode: the vendor controlling the authoritative evidence during a dispute.
@@ -356,7 +364,6 @@ DAR answers with a receipt + integrity proof + context references:
       <div style="display:flex; gap:14px; flex-wrap:wrap;">
         <a href="definition.html">Definition</a>
         <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
         <a href="principles.html">Principles</a>
         <a href="docs.html">Docs</a>
       </div>
