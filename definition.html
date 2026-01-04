@@ -4,28 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Definition — Digital Action Receipts (DAR)</title>
-  <meta name="description" content="Formal definition of Digital Action Receipts (DAR): verifiable, append-only evidence issued at action time, stored under customer custody, independently verifiable." />
+  <meta name="description" content="Digital Action Receipts (DAR) are signed, tamper-evident evidence artifacts emitted after actions commit—stored under customer custody and independently verifiable later." />
 
   <style>
     :root{
       --bg:#ffffff;
-      --text:#0f172a;       /* slate-900 */
-      --muted:#475569;      /* slate-600 */
-      --muted2:#64748b;     /* slate-500 */
-      --line:#e2e8f0;       /* slate-200 */
-      --card:#f8fafc;       /* slate-50 */
-      --chip:#f1f5f9;       /* slate-100 */
-      --accent:#2563eb;     /* blue-600 */
-      --accent2:#0ea5e9;    /* sky-500 */
+      --text:#0f172a;
+      --muted:#475569;
+      --muted2:#64748b;
+      --line:#e2e8f0;
+      --card:#f8fafc;
+      --chip:#f1f5f9;
       --shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
       --radius:16px;
       --radius2:22px;
       --max: 1040px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
     *{ box-sizing:border-box; }
-    html,body{ height:100%; }
     body{
       margin:0;
       font-family:var(--sans);
@@ -67,7 +63,6 @@
       font-size:11px;
       margin-left:6px;
     }
-
     .navlinks{
       display:flex;
       gap:16px;
@@ -101,9 +96,7 @@
       font-weight:650;
       color:var(--text);
     }
-    .menuIcon{
-      width:18px; height:12px; position:relative;
-    }
+    .menuIcon{ width:18px; height:12px; position:relative; }
     .menuIcon span{
       position:absolute; left:0; right:0;
       height:2px; border-radius:2px;
@@ -147,7 +140,7 @@
       .mobileDrawer[hidden]{ display:none !important; }
     }
 
-    /* Content */
+    /* Page */
     .kicker{
       margin:28px 0 10px;
       font-size:12px;
@@ -164,18 +157,7 @@
     .lede{
       color:var(--muted);
       font-size:18px;
-      max-width:72ch;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.25fr 0.85fr;
-      gap:18px;
-      margin-top:22px;
-      align-items:start;
-    }
-    @media (max-width:900px){
-      .grid{ grid-template-columns:1fr; }
+      max-width:78ch;
     }
 
     .card{
@@ -185,75 +167,74 @@
       padding:18px;
       box-shadow: var(--shadow);
     }
-    .card h2{
+    .section{ margin-top:18px; }
+    .section h2{
       margin:0 0 10px;
       font-size:18px;
       letter-spacing:-0.01em;
     }
-    .card p{ margin:0 0 10px; color:var(--muted); }
     .small{ font-size:13px; color:var(--muted2); }
 
-    .callout{
-      background:linear-gradient(180deg, rgba(37,99,235,0.06), rgba(14,165,233,0.04));
-      border:1px solid rgba(37,99,235,0.14);
-      border-radius:var(--radius2);
-      padding:16px 16px;
-    }
-    .callout strong{ display:block; margin-bottom:6px; }
-    .chips{
-      display:flex; flex-wrap:wrap; gap:8px;
-      margin-top:10px;
-    }
-    .chip{
-      background:var(--chip);
-      border:1px solid var(--line);
-      color:var(--muted);
-      border-radius:999px;
-      padding:7px 10px;
-      font-size:13px;
-      font-weight:600;
-    }
-
-    pre, code{
-      font-family:var(--mono);
-      font-size:13px;
-    }
-    .defBox{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px 14px;
-      overflow:auto;
-    }
-    .defBox code{ color:#0f172a; }
-    .section{
-      margin-top:22px;
-    }
-    .section h3{
-      margin:0 0 10px;
-      font-size:20px;
-      letter-spacing:-0.01em;
-    }
-    .two{
+    .grid2{
+      margin-top:18px;
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:14px;
+      align-items:start;
     }
-    @media (max-width:800px){
-      .two{ grid-template-columns:1fr; }
+    @media (max-width:900px){
+      .grid2{ grid-template-columns:1fr; }
     }
 
     ul{ margin:10px 0 0 18px; color:var(--muted); }
     li{ margin:6px 0; }
 
-    .note{
-      border-top:1px solid var(--line);
-      margin-top:18px;
-      padding-top:14px;
-      color:var(--muted2);
+    .pillRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .pill{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:7px 10px;
       font-size:13px;
-      display:grid;
-      gap:6px;
+      font-weight:650;
+      color:var(--muted);
+    }
+
+    .callout{
+      background:linear-gradient(180deg, rgba(37,99,235,0.06), rgba(14,165,233,0.04));
+      border:1px solid rgba(37,99,235,0.14);
+      border-radius:var(--radius2);
+      padding:16px;
+    }
+    .callout strong{ display:block; margin-bottom:6px; }
+
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:700;
+      color:var(--text);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+    }
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(37,99,235,0.12), rgba(14,165,233,0.08));
+      border-color: rgba(37,99,235,0.18);
     }
 
     /* Footer */
@@ -285,11 +266,11 @@
         Menu
       </button>
 
+      <!-- Integration removed -->
       <div class="navlinks" aria-label="Primary navigation">
         <a href="index.html">Home</a>
         <a class="active" href="definition.html">Definition</a>
         <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
         <a href="principles.html">Principles</a>
         <a href="docs.html">Docs</a>
       </div>
@@ -300,7 +281,6 @@
         <a href="index.html">Home</a>
         <a class="active" href="definition.html">Definition</a>
         <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
         <a href="principles.html">Principles</a>
         <a href="docs.html">Docs</a>
       </div>
@@ -308,156 +288,113 @@
   </div>
 
   <main class="wrap">
-    <div class="kicker">Formal definition</div>
-    <h1>Receipts are evidence, not telemetry.</h1>
+    <div class="kicker">Definition</div>
+    <h1>What is a Digital Action Receipt?</h1>
     <p class="lede">
-      Digital Action Receipts (DARs) are durable, append-only proof that a specific action occurred—issued at action time,
-      preserved under customer custody, and independently verifiable later.
+      A Digital Action Receipt (DAR) is a signed, tamper-evident evidence artifact emitted after a digital action commits.
+      It exists to prove that an action happened, at a particular time, under a particular referenced context—without relying
+      on internal logs or vendor-controlled databases as the ultimate authority.
     </p>
 
-    <div class="grid">
-      <!-- Left: main definition -->
+    <div class="section callout">
+      <strong>The core idea</strong>
+      <div class="small">
+        In disputes, the question is not “what does the system say now?” It’s “what can be proven happened then?”
+        DAR makes that proof portable.
+      </div>
+    </div>
+
+    <div class="section grid2">
       <div class="card">
-        <h2>Definition</h2>
-
-        <div class="defBox" role="region" aria-label="DAR definition">
-          <code>
-DAR = a verifiable, append-only record of a digital action, issued at execution time.
-
-It preserves:
-  • actor
-  • action
-  • object / target
-  • timestamp
-  • stable reference (receipt_ref)
-  • policy / context references (optional)
-  • integrity proof (signature / hash chain)
-          </code>
-        </div>
-
-        <div class="section">
-          <h3>Why this exists</h3>
-          <p class="small">
-            When systems are questioned later, logs and narratives drift. DAR provides a stable reference that survives remediation and hindsight.
-          </p>
-          <div class="chips" aria-label="Common triggers">
-            <span class="chip">disputes</span>
-            <span class="chip">audits</span>
-            <span class="chip">incidents</span>
-            <span class="chip">claims</span>
-            <span class="chip">investigations</span>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>What DAR is</h3>
-          <div class="two">
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Evidence artifact</strong></p>
-              <p class="small">DAR records facts: what happened, when, and under what referenced context.</p>
-            </div>
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Issued at commit time</strong></p>
-              <p class="small">Receipts are emitted after an action commits (non-blocking), not reconstructed later.</p>
-            </div>
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Independently verifiable</strong></p>
-              <p class="small">Unlike logs, receipts provide tamper-evident proof that can be verified outside the system.</p>
-            </div>
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Customer custody</strong></p>
-              <p class="small">Receipts are stored in customer-controlled, immutable/append-only storage.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>What DAR is not</h3>
-          <div class="two">
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Not monitoring</strong></p>
-              <p class="small">No surveillance. No dashboards required. No continuous observation layer.</p>
-            </div>
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Not enforcement</strong></p>
-              <p class="small">DAR does not decide, block, score, or interpret runtime behavior.</p>
-            </div>
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Not a system of record</strong></p>
-              <p class="small">DAR preserves evidence. Source systems keep authority over data and state.</p>
-            </div>
-            <div class="card" style="box-shadow:none;">
-              <p><strong>Not raw data storage</strong></p>
-              <p class="small">Receipts store references (policy_version_ref, model_version_hash, config_ref), not sensitive payloads.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="note">
-          <div>Receipts store references (policy versions, model hashes, config refs)—not raw data.</div>
-          <div>Receipts are issued at action time, not reconstructed later.</div>
-          <div>Unlike logs, receipts provide independent, tamper-evident proof.</div>
-          <div>No surveillance, no monitoring, no decision logic.</div>
+        <h2>What DAR is</h2>
+        <ul>
+          <li><strong>Evidence</strong> of an action that committed</li>
+          <li><strong>Issued at action time</strong> (not reconstructed later)</li>
+          <li><strong>Append-only</strong> (corrections are new receipts, not edits)</li>
+          <li><strong>Customer-custodied</strong> (stored under customer control)</li>
+          <li><strong>Independently verifiable</strong> (integrity can be checked outside the issuer)</li>
+          <li><strong>Minimal by design</strong> (references to context, not sensitive payloads)</li>
+        </ul>
+        <div class="pillRow">
+          <span class="pill">post-commit</span>
+          <span class="pill">tamper-evident</span>
+          <span class="pill">portable proof</span>
+          <span class="pill">customer custody</span>
         </div>
       </div>
 
-      <!-- Right: philosophy + custody -->
       <div class="card">
-        <h2>Philosophy</h2>
+        <h2>What DAR is not</h2>
+        <ul>
+          <li><strong>Not monitoring</strong> — no continuous surveillance layer</li>
+          <li><strong>Not decision logic</strong> — DAR does not approve/deny or score outcomes</li>
+          <li><strong>Not enforcement</strong> — DAR does not block actions</li>
+          <li><strong>Not a system of record</strong> — source systems remain authoritative for data/state</li>
+          <li><strong>Not a data lake</strong> — receipts do not default to storing sensitive payloads</li>
+        </ul>
+        <p class="small" style="margin-top:10px;">
+          DAR’s value depends on staying narrow: evidence, custody, and verifiability.
+        </p>
+      </div>
+    </div>
 
-        <div class="callout">
-          <strong>In disputes, audits, and investigations, the system is not the witness. The receipt is.</strong>
-          <div class="small" style="margin-top:6px;">
-            DAR does not replace systems of record. DAR replaces reconstruction—by giving the customer an evidence artifact
-            that stands independently of the vendor, the platform, or the operator.
-          </div>
-        </div>
+    <div class="section card">
+      <h2>What a receipt preserves (conceptually)</h2>
+      <p class="small">
+        A receipt preserves a defensible statement about an action and the context needed to evaluate that action later—without copying private data.
+      </p>
+      <ul>
+        <li><strong>Who/what acted</strong> (human, service, agent)</li>
+        <li><strong>What action committed</strong> (a stable action label)</li>
+        <li><strong>What the action targeted</strong> (a durable reference to the object/resource)</li>
+        <li><strong>When it committed</strong> (timestamp)</li>
+        <li><strong>How to correlate it</strong> (a stable reference that ties related receipts into a timeline)</li>
+        <li><strong>Which context applied</strong> (references to policy/model/config versions, when relevant)</li>
+        <li><strong>Integrity proof</strong> (so tampering is detectable)</li>
+      </ul>
+      <p class="small" style="margin-top:10px;">
+        The key word is <em>references</em>: a receipt points to context registries and records—it doesn’t replace them.
+      </p>
+    </div>
 
-        <div class="section">
-          <h3>Custody & storage</h3>
-          <p class="small">
-            Receipts are written into customer-owned infrastructure. DAR does not act as a system of record.
-          </p>
-          <ul>
-            <li>AWS S3 Object Lock</li>
-            <li>Azure Immutable Blob</li>
-            <li>GCP Retention Bucket</li>
-          </ul>
-        </div>
+    <div class="section grid2">
+      <div class="card">
+        <h2>Custody: where receipts live</h2>
+        <p class="small">
+          Receipts should be stored in customer-controlled immutable storage. This preserves chain-of-custody and reduces a common dispute failure mode:
+          the vendor controlling the authoritative evidence.
+        </p>
+        <ul>
+          <li><strong>Customer-controlled</strong> storage location and permissions</li>
+          <li><strong>Immutable / append-only</strong> retention and write protections</li>
+          <li><strong>Portable</strong> across vendors and system migrations</li>
+        </ul>
+      </div>
 
-        <div class="section">
-          <h3>Minimal receipt example</h3>
-          <div class="defBox">
-            <code>
-{
-  "id": "8F6A92",
-  "ts": "2026-01-04T15:24:11Z",
-  "actor": "agent|user|system",
-  "action": "transaction.executed",
-  "object": "order-123",
-  "receipt_ref": "internal-id-123",
-  "policy_version_ref": "policy-v7",
-  "model_version_hash": "sha256:…",
-  "integrity": {
-    "signature": "…",
-    "hash_chain_prev": "…"
-  }
-}
-            </code>
-          </div>
-          <p class="small" style="margin-top:10px;">
-            This is intentionally compact: enough to prove the action occurred and bind it to referenced context.
-          </p>
-        </div>
+      <div class="card">
+        <h2>Verification: how proof holds up</h2>
+        <p class="small">
+          A receipt should be verifiable without trusting the system that issued it. Verification is about integrity and consistency:
+          confirming the receipt hasn’t been altered and still matches the referenced context.
+        </p>
+        <ul>
+          <li>Validate integrity proof (tamper evidence)</li>
+          <li>Confirm the receipt belongs to the customer’s evidence store</li>
+          <li>Resolve referenced context (policy/model/config) as needed</li>
+          <li>Render an action timeline for review (audit, dispute, investigation)</li>
+        </ul>
+      </div>
+    </div>
 
-        <div class="section">
-          <h3>Where to go next</h3>
-          <div class="chips">
-            <a class="chip" href="principles.html">Invariants & non-goals</a>
-            <a class="chip" href="integration.html">Integration patterns</a>
-            <a class="chip" href="action-domains.html">Action domains</a>
-          </div>
-        </div>
+    <div class="section card">
+      <h2>Why DAR exists</h2>
+      <p class="small">
+        DAR exists because modern systems change quickly—especially AI and automated workflows.
+        When accountability arrives, organizations need durable evidence that survives migrations, refactors, and vendor turnover.
+      </p>
+      <div class="ctaRow">
+        <a class="btn primary" href="action-domains.html">Explore Action Domains</a>
+        <a class="btn" href="principles.html">Read the Principles</a>
       </div>
     </div>
 
@@ -471,7 +408,6 @@ It preserves:
       <div style="display:flex; gap:14px; flex-wrap:wrap;">
         <a href="definition.html">Definition</a>
         <a href="action-domains.html">Action Domains</a>
-        <a href="integration.html">Integration</a>
         <a href="principles.html">Principles</a>
         <a href="docs.html">Docs</a>
       </div>
