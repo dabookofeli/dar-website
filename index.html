@@ -1,14 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Digital Action Receipts (DAR) are open, verifiable records of digital actions. SV-DAR adds self-verifying guarantees for adversarial and high-stakes environments. Tools, specification, and open-source code included." />
-  <title>Digital Action Receipts (DAR) + SV-DAR — Open evidence & self-verifying trust</title>
+  <meta name="description" content="Digital Action Receipts (DAR) are open, verifiable records of digital actions. SV-DAR adds self-verifying guarantees for adversarial and high-stakes environments. Tools, specification, and open-source reference code included." />
+  <meta name="keywords" content="Digital Action Receipts, DAR, SV-DAR, verifiable logs, AI accountability, audit trails, cryptographic receipts, verification" />
+  <title>Digital Action Receipts (DAR) + SV-DAR — Open verifiable action proofs</title>
+
   <style>
     :root{
       --bg:#ffffff;
       --panel:#f7f8fa;
+      --panel2:#ffffff;
       --text:#0b0f1a;
       --muted:#5b6476;
       --line:#e7eaf0;
@@ -17,9 +20,20 @@
       --shadow: 0 10px 30px rgba(11,15,26,0.06);
       --radius:16px;
       --max:1120px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
+
+    html[data-theme="dark"]{
+      --bg:#0b0f1a;
+      --panel:#0f1526;
+      --panel2:#0c1222;
+      --text:#eef2ff;
+      --muted:#a6b0c3;
+      --line:#202a3f;
+      --shadow: 0 12px 34px rgba(0,0,0,0.35);
+    }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -32,15 +46,14 @@
     a{color:inherit; text-decoration:none}
     .container{max-width:var(--max); margin:0 auto; padding:0 20px}
 
-    /* NAV */
     .nav{
       position:sticky; top:0; z-index:50;
-      background:rgba(255,255,255,0.9);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
       backdrop-filter:saturate(180%) blur(10px);
       border-bottom:1px solid var(--line);
     }
-    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
-    .brand{display:flex; align-items:center; gap:10px}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px; min-width:240px}
     .logo{
       width:34px;height:34px;border-radius:10px;
       display:grid;place-items:center;
@@ -52,19 +65,21 @@
     .brand-title{font-weight:780; letter-spacing:-0.02em}
     .brand-sub{color:var(--muted); font-size:12px; margin-top:-2px}
 
-    .nav-links{display:flex; align-items:center; gap:18px}
+    .nav-links{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
     .nav-links a{font-size:14px; color:var(--muted)}
     .nav-links a:hover{color:var(--text)}
+    .nav-right{display:flex; align-items:center; gap:10px}
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       border-radius:12px; padding:10px 14px;
       font-weight:650; font-size:14px;
       border:1px solid var(--line);
-      background:#fff;
+      background:var(--panel2);
       box-shadow: 0 2px 10px rgba(11,15,26,0.04);
+      gap:8px;
     }
-    .btn:hover{border-color:#d7dce6}
+    .btn:hover{border-color: color-mix(in srgb, var(--line) 60%, var(--text) 40%)}
     .btn-primary{
       background:var(--accent);
       border-color:var(--accent);
@@ -72,18 +87,12 @@
       box-shadow: 0 10px 28px rgba(11,92,255,0.22);
     }
     .btn-primary:hover{filter:brightness(0.98)}
-    .btn-green{
-      background:var(--accent2);
-      border-color:var(--accent2);
-      color:#fff;
-      box-shadow: 0 10px 28px rgba(10,143,91,0.18);
-    }
-    .btn-green:hover{filter:brightness(0.98)}
+    .btn-ghost{background:transparent; box-shadow:none;}
 
     .menu-btn{
       display:none;
-      width:40px;height:40px;border-radius:12px;
-      border:1px solid var(--line); background:#fff;
+      width:42px;height:42px;border-radius:12px;
+      border:1px solid var(--line); background:var(--panel2);
     }
     .menu-panel{
       display:none;
@@ -99,8 +108,7 @@
     }
     .menu-panel a:hover{background:var(--panel); color:var(--text)}
 
-    /* HERO */
-    header.hero{padding:52px 0 18px 0;}
+    header.hero{padding:52px 0 16px 0;}
     .kicker{
       display:inline-flex; align-items:center; gap:8px;
       padding:6px 10px;
@@ -122,7 +130,7 @@
     .lead{
       font-size:18px;
       color:var(--muted);
-      max-width:900px;
+      max-width:920px;
       margin:0 0 16px 0;
     }
     .hero-cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px}
@@ -130,34 +138,24 @@
       margin-top:12px;
       color:var(--muted);
       font-size:13px;
-      max-width:900px;
+      max-width:920px;
     }
 
-    /* SECTIONS */
-    .section{
-      padding:44px 0;
-      border-top:1px solid var(--line);
-    }
+    .section{padding:44px 0; border-top:1px solid var(--line);}
     .section-head{
       display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
       margin-bottom:16px;
     }
-    .section-head h2{
-      margin:0;
-      font-size:26px;
-      letter-spacing:-0.02em;
-    }
-    .section-head p{
-      margin:0;
-      color:var(--muted);
-      max-width:680px;
-      font-size:14px;
-    }
+    .section-head h2{margin:0; font-size:26px; letter-spacing:-0.02em;}
+    .section-head p{margin:0; color:var(--muted); max-width:700px; font-size:14px;}
+
+    .grid-2{display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:16px;}
+    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:16px;}
 
     .card{
       border:1px solid var(--line);
       border-radius:var(--radius);
-      background:#fff;
+      background:var(--panel2);
       box-shadow: var(--shadow);
       padding:18px;
     }
@@ -165,7 +163,7 @@
     .card p{margin:0; color:var(--muted); font-size:14px}
 
     .pill{
-      display:inline-flex; align-items:center;
+      display:inline-flex; align-items:center; gap:8px;
       padding:6px 10px; border-radius:999px;
       border:1px solid var(--line);
       font-size:12px;
@@ -173,28 +171,16 @@
       background:var(--panel);
       font-weight:650;
     }
-    .badge{
-      display:inline-flex;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid rgba(10,143,91,0.25);
-      background: rgba(10,143,91,0.08);
-      color: var(--accent2);
-      font-size: 12px;
-      font-weight: 750;
-    }
-
-    .grid-2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:16px;
-      margin-top:16px;
-    }
-    .grid-3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:16px;
-      margin-top:16px;
+    .mini{font-size:13px; color:var(--muted)}
+    .codebox{
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:14px;
+      padding:14px;
+      overflow:auto;
+      font-family: var(--mono);
+      font-size:12.5px;
+      color: color-mix(in srgb, var(--text) 90%, #000 10%);
     }
 
     .list{margin:12px 0 0 0; padding:0; list-style:none}
@@ -218,30 +204,30 @@
       font-size:12px;
     }
 
-    .codebox{
+    .badge{
+      display:inline-flex;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(11,92,255,0.22);
+      background: rgba(11,92,255,0.08);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .diagram{
       border:1px solid var(--line);
       background:var(--panel);
-      border-radius:14px;
+      border-radius:18px;
       padding:14px;
-      overflow:auto;
-      font-family: var(--mono);
-      font-size:12.5px;
-      color:#1b2436;
-    }
-    .mini{font-size:13px; color:var(--muted)}
-    .right{justify-self:end}
-
-    .banner{
-      border:1px solid rgba(11,92,255,0.22);
-      background: linear-gradient(180deg, rgba(11,92,255,0.06) 0%, rgba(11,92,255,0.02) 100%);
-      border-radius: 18px;
-      padding:16px;
-      box-shadow: var(--shadow);
+      overflow:hidden;
       margin-top:16px;
     }
-    .banner h3{margin:0 0 6px 0}
+    .diagram svg{width:100%; height:auto; display:block}
 
-    /* FOOTER */
+    .price{font-size:28px; letter-spacing:-0.02em; margin:8px 0 2px 0; font-weight:800;}
+    .price-sub{color:var(--muted); font-size:13px}
+
     footer{
       padding:28px 0 40px 0;
       border-top:1px solid var(--line);
@@ -257,19 +243,33 @@
     .footer-grid a{color:var(--muted)}
     .footer-grid a:hover{color:var(--text)}
 
+    .ico{width:16px;height:16px; display:inline-block}
+    .ico path, .ico circle, .ico rect, .ico line, .ico polyline{
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     @media (max-width: 940px){
       h1{font-size:36px}
       .grid-2{grid-template-columns:1fr}
       .grid-3{grid-template-columns:1fr}
       .footer-grid{grid-template-columns:1fr}
-      .right{justify-self:start}
       .nav-links{display:none}
       .menu-btn{display:inline-grid; place-items:center}
       .menu-panel.show{display:block}
+      .brand{min-width:auto}
     }
   </style>
 </head>
+
 <body>
+  <script>
+    // Canonical repo link (live)
+    const GITHUB_URL = "https://github.com/dabookofeli/dar-spec";
+  </script>
 
   <!-- NAV -->
   <div class="nav">
@@ -279,177 +279,156 @@
           <div class="logo">DAR</div>
           <div>
             <div class="brand-title">Digital Action Receipts</div>
-            <div class="brand-sub">DAR (open) + SV-DAR (self-verifying layer)</div>
+            <div class="brand-sub">Open DAR + premium SV-DAR + tools</div>
           </div>
         </a>
 
-<nav class="nav-links" aria-label="Primary">
-  <a
-    href="https://github.com/dabookofeli/dar-spec/blob/main/spec/dar-core.md"
-    target="_blank"
-    rel="noopener"
-  >
-    DAR Spec
-  </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="#svdar">SV-DAR</a>
+          <a href="#tools">Tools</a>
+          <a href="#dar">DAR</a>
+          <a href="#code">Code</a>
+          <a href="#why">Why now</a>
+          <a href="#pricing">Pricing</a>
+        </nav>
 
-  <a href="#svdar">SV-DAR</a>
-  <a href="#tools">Tools</a>
-  <a href="#dar">DAR</a>
-  <a href="#code">Code</a>
-  <a href="#principles">Principles</a>
-  <a href="#pricing">Pricing</a>
-  <a class="btn" href="#contact">Contact</a>
-  <a class="btn btn-primary" href="#get-started">Get started</a>
-</nav>
+        <div class="nav-right">
+          <a class="btn btn-primary" id="githubTop" href="#" target="_blank" rel="noopener">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 8.52c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+            GitHub
+          </a>
 
-        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+          <button class="btn btn-ghost" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme">
+            <span id="themeLabel">Dark</span>
+          </button>
+
+          <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+        </div>
       </div>
 
-<!-- Mobile menu -->
-<div class="menu-panel" id="menuPanel" aria-label="Mobile menu">
-  <a
-    href="https://github.com/dabookofeli/dar-spec/blob/main/spec/dar-core.md"
-    target="_blank"
-    rel="noopener"
-  >
-    DAR Spec
-  </a>
-
-  <a href="#svdar">SV-DAR</a>
-  <a href="#tools">Tools</a>
-  <a href="#dar">DAR</a>
-  <a href="#code">Code</a>
-  <a href="#principles">Principles</a>
-  <a href="#pricing">Pricing</a>
-  <a href="#contact">Contact</a>
-  <a href="#get-started">Get started</a>
-</div>
+      <div class="menu-panel" id="menuPanel" aria-label="Mobile menu">
+        <a href="#svdar">SV-DAR</a>
+        <a href="#tools">Tools</a>
+        <a href="#dar">DAR</a>
+        <a href="#code">Code</a>
+        <a href="#why">Why now</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+    </div>
+  </div>
 
   <!-- HERO -->
   <header class="hero" id="top">
-    <div class="container" id="get-started">
-      <span class="kicker"><span class="dot"></span> Open receipt primitive + commercial self-verifying layer</span>
+    <div class="container">
+      <span class="kicker"><span class="dot"></span> Open action receipts + self-verifying guarantees for high-stakes systems</span>
 
-      <h1>DAR is open evidence of digital actions. SV-DAR makes that evidence self-verifying in high-stakes environments.</h1>
+      <h1>Open, verifiable action proofs — plus SV-DAR for adversarial-grade trust.</h1>
 
       <p class="lead">
-        <strong>Digital Action Receipts (DAR)</strong> are cryptographically verifiable “proof objects” for API requests, approvals, transactions, and AI agent decisions.
-        DAR stays neutral and portable.
+        <strong>DAR</strong> is the open receipt primitive: a small, tamper-evident record that a digital action occurred
+        (API request, approval, transaction, or AI agent decision).
         <br><br>
-        <strong>SV-DAR</strong> is the premium layer built on top of DAR: stronger independent verification designed for adversarial, cross-organization, and audit-heavy workflows.
-        SV-DAR is positioned as the primary commercial product line.
+        <strong>SV-DAR</strong> is the premium layer built on top of DAR: stronger self-verifying guarantees designed for cross-organization workflows,
+        disputes, and audit-heavy environments — positioned as the primary commercial product line.
       </p>
 
       <div class="hero-cta">
-        <a class="btn btn-green" href="#svdar">Explore SV-DAR</a>
-        <a class="btn btn-primary" href="#tools">See tools</a>
-        <a class="btn" href="#code">Get code</a>
+        <a class="btn btn-primary" id="githubHero" href="#" target="_blank" rel="noopener">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+          </svg>
+          Spec & Reference Code
+        </a>
+        <a class="btn" href="#svdar">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 1l3 5 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1z"/>
+          </svg>
+          SV-DAR Overview
+        </a>
+        <a class="btn" href="#tools">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.7 6.3a4 4 0 0 0 0 5.7l-8.4 8.4a2 2 0 0 1-2.8 0l-.7-.7a2 2 0 0 1 0-2.8L11.2 8.5a4 4 0 0 0 5.7 0l1.4-1.4-3.6-3.6Z"/>
+            <path d="M19 2l3 3"/>
+          </svg>
+          Tools
+        </a>
       </div>
 
       <p class="fineprint">
-        Receipts can be issued and stored independently. We monetize optional services (verification, chain operations, intelligence) and SV-DAR capabilities.
+        DARs can be issued and stored independently. We monetize optional services (verification, chain operations, intelligence) and SV-DAR capabilities.
       </p>
 
-      <div class="banner">
-        <div class="badge">Primary focus</div>
-        <h3 style="margin-top:10px;">SV-DAR is the commercial layer. DAR is the open foundation.</h3>
-        <p class="mini">
-          This site is the home of the DAR concept, spec, and code paths — while SV-DAR delivers premium verification guarantees for the workflows where “proof” must withstand dispute, audit, and adversarial scrutiny.
-        </p>
+      <div class="diagram" aria-label="DAR workflow diagram">
+        <svg viewBox="0 0 1100 160" role="img" aria-label="DAR issuance to verification, with SV-DAR enhancement">
+          <defs>
+            <style>
+              .box{fill: var(--panel2); stroke: var(--line); stroke-width:2;}
+              .t{fill: var(--text); font-family: var(--sans); font-size:16px; font-weight:700;}
+              .s{fill: var(--muted); font-family: var(--sans); font-size:12px;}
+              .a{stroke: var(--muted); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+              .sv{fill: rgba(10,143,91,0.10); stroke: rgba(10,143,91,0.35); stroke-width:2;}
+            </style>
+          </defs>
+
+          <rect class="box" x="20"  y="30" width="220" height="100" rx="16"/>
+          <rect class="box" x="290" y="30" width="220" height="100" rx="16"/>
+          <rect class="box" x="560" y="30" width="220" height="100" rx="16"/>
+          <rect class="sv"  x="830" y="30" width="250" height="100" rx="16"/>
+
+          <path class="a" d="M240 80 H290"/>
+          <path class="a" d="M510 80 H560"/>
+          <path class="a" d="M780 80 H830"/>
+
+          <text class="t" x="40" y="68">Digital action</text>
+          <text class="s" x="40" y="92">API, approval, transaction, agent decision</text>
+
+          <text class="t" x="310" y="68">Receipt issued</text>
+          <text class="s" x="310" y="92">hash refs + signature (DAR)</text>
+
+          <text class="t" x="580" y="68">Stored append-only</text>
+          <text class="s" x="580" y="92">any storage chosen by parties</text>
+
+          <text class="t" x="850" y="62">Independent verification</text>
+          <text class="s" x="850" y="86">DAR verify + tools</text>
+          <text class="t" x="850" y="112">SV-DAR enhancement</text>
+        </svg>
       </div>
     </div>
   </header>
 
-  <!-- DAR SPECIFICATION (CANONICAL) -->
-<section class="section" id="dar-specification">
-  <div class="container">
-    <div class="section-head">
-      <div class="badge">Specification</div>
-      <h2>Digital Action Receipts (DAR) Core Specification</h2>
-      <p class="mini">
-        Digital Action Receipts are defined by an open, vendor-neutral
-        specification for issuing cryptographically verifiable proof that
-        a digital action occurred.
-      </p>
-    </div>
-
-    <p>
-      The DAR specification is maintained independently as open source.
-      This website provides narrative context; the specification itself
-      is authoritative.
-    </p>
-
-    <a
-      class="btn btn-primary"
-      href="https://github.com/dabookofeli/dar-spec/blob/main/spec/dar-core.md"
-      target="_blank"
-      rel="noopener"
-    >
-      View DAR Core Specification →
-    </a>
-  </div>
-</section>
-
-  <!-- SV-DAR (FOCUS SECTION) -->
+  <!-- SV-DAR -->
   <section class="section" id="svdar">
     <div class="container">
       <div class="section-head">
         <div>
           <h2>SV-DAR</h2>
-          <p>SV-DAR strengthens receipts where basic signatures aren’t enough: cross-party trust, disputes, audits, and adversarial settings.</p>
+          <p>SV-DAR is the commercial layer: stronger self-verifying guarantees for workflows that must stand up under dispute, audit, and adversarial scrutiny.</p>
         </div>
         <div class="right">
-          <a class="btn btn-green" href="#pricing">SV-DAR plans</a>
+          <span class="badge">Commercial focus</span>
         </div>
       </div>
 
       <div class="grid-3">
         <div class="card">
-          <span class="pill">Why it exists</span>
-          <h3 style="margin-top:10px;">When incentives conflict</h3>
-          <p>In disputes and cross-organization workflows, “who signed what” is necessary but not always sufficient for independent confidence at scale.</p>
+          <span class="pill">Stronger guarantees</span>
+          <h3 style="margin-top:10px;">Self-verifying trust</h3>
+          <p>Designed for environments where “basic signatures” are not enough for independent confidence at scale.</p>
         </div>
         <div class="card">
-          <span class="pill">What it adds</span>
-          <h3 style="margin-top:10px;">Stronger self-verification</h3>
-          <p>SV-DAR introduces enhanced verification mechanics and guarantees designed to be independently checkable in hostile or high-stakes contexts.</p>
+          <span class="pill">Cross-organization</span>
+          <h3 style="margin-top:10px;">Vendor-to-vendor verification</h3>
+          <p>Built for workflows spanning parties who don’t share systems, policies, or trust assumptions.</p>
         </div>
         <div class="card">
-          <span class="pill">Commercial layer</span>
-          <h3 style="margin-top:10px;">Patent-backed product line</h3>
-          <p>SV-DAR is the premium offering: engineered guarantees, operational reliability, and enterprise integration support.</p>
+          <span class="pill">Enterprise-ready</span>
+          <h3 style="margin-top:10px;">Operationally reliable</h3>
+          <p>Premium capabilities, integration support, and production-grade service expectations.</p>
         </div>
       </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <span class="pill">Where SV-DAR wins</span>
-          <h3 style="margin-top:10px;">High-stakes use cases</h3>
-          <ul class="list">
-            <li><span class="check">✓</span><span>Disputes, claims, and incident reconstruction</span></li>
-            <li><span class="check">✓</span><span>Regulated audit trails across systems and vendors</span></li>
-            <li><span class="check">✓</span><span>AI agent decision accountability over time</span></li>
-            <li><span class="check">✓</span><span>Third-party / cross-org verification at scale</span></li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <span class="pill">Relationship</span>
-          <h3 style="margin-top:10px;">DAR → SV-DAR</h3>
-          <p class="mini">
-            DAR is the open receipt format. SV-DAR builds on DAR to deliver stronger, self-verifying guarantees for workflows that must stand up under scrutiny.
-          </p>
-          <ul class="list">
-            <li><span class="check">✓</span><span>DAR: minimal, portable, inspectable evidence</span></li>
-            <li><span class="check">✓</span><span>SV-DAR: enhanced verification for adversarial settings</span></li>
-            <li><span class="check">✓</span><span>Tools: optional services that operate on both</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="fineprint">
-        This is intentionally public-safe and high-level. Your SV-DAR dedicated page can go deeper without over-disclosing implementation details.
-      </p>
     </div>
   </section>
 
@@ -461,16 +440,13 @@
           <h2>Tools</h2>
           <p>Optional services applied to DAR/SV-DAR: verification, chain operations, intelligence, and dispute workflows.</p>
         </div>
-        <div class="right">
-          <a class="btn" href="#pricing">Pricing</a>
-        </div>
       </div>
 
       <div class="grid-3">
         <div class="card">
           <span class="pill">Verification</span>
           <h3 style="margin-top:10px;">Verify receipts</h3>
-          <p>Signature validity, schema compliance, hash integrity — single or batch.</p>
+          <p>Signature validity, schema compliance, hash integrity — single or batch verification.</p>
         </div>
         <div class="card">
           <span class="pill">Chain operations</span>
@@ -485,43 +461,22 @@
       </div>
 
       <div class="card" style="margin-top:16px;">
-        <h3>How pricing stays fair</h3>
+        <h3>Fairness model</h3>
         <p class="mini">
           Receipts are free to exist. You pay only when you ask our systems to do work: verify, traverse, analyze, report, or support dispute workflows.
-          SV-DAR capabilities are offered as premium services.
+          SV-DAR capabilities are premium.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- DAR (FOUNDATION) -->
+  <!-- DAR -->
   <section class="section" id="dar">
     <div class="container">
       <div class="section-head">
         <div>
-          <h2>DAR</h2>
-          <p>The open receipt primitive: small, portable, independently verifiable proof that a digital action occurred.</p>
-        </div>
-        <div class="right">
-          <a class="btn" href="#code">Quickstart</a>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <span class="pill">Evidence primitive</span>
-          <h3 style="margin-top:10px;">Proof of occurrence</h3>
-          <p>Records key metadata + cryptographic proof — without deciding correctness or compliance.</p>
-        </div>
-        <div class="card">
-          <span class="pill">Neutral</span>
-          <h3 style="margin-top:10px;">No gatekeeping</h3>
-          <p>Receipts can be self-issued and stored anywhere; independent verification remains possible.</p>
-        </div>
-        <div class="card">
-          <span class="pill">Composable</span>
-          <h3 style="margin-top:10px;">Chains & graphs</h3>
-          <p>Receipts can reference prior receipts to form timelines for workflows and agents.</p>
+          <h2>DAR (Open primitive)</h2>
+          <p>DAR is the minimal, portable receipt format: proof an action occurred — not a judgment of correctness or compliance.</p>
         </div>
       </div>
 
@@ -529,7 +484,6 @@
         <div class="card">
           <span class="pill">Minimal example</span>
           <h3 style="margin-top:10px;">Small by design</h3>
-          <p class="mini">Illustrative only — replace with your canonical schema later.</p>
           <div class="codebox" role="region" aria-label="DAR JSON example" style="margin-top:12px;">
 <pre>{
   "dar_version": "1.0",
@@ -542,6 +496,9 @@
   "signature": "ed25519:..."
 }</pre>
           </div>
+          <p class="mini" style="margin-top:10px;">
+            Principle: store references (hashes/IDs) to context — not sensitive payloads.
+          </p>
         </div>
 
         <div class="card">
@@ -549,9 +506,9 @@
           <h3 style="margin-top:10px;">DARs are not a product</h3>
           <ul class="list">
             <li><span class="check">✓</span><span>DARs are not owned by this site</span></li>
-            <li><span class="check">✓</span><span>DARs are not required to be stored on our platform</span></li>
             <li><span class="check">✓</span><span>DARs do not require our permission to exist</span></li>
-            <li><span class="check">✓</span><span>We sell optional services and SV-DAR capabilities</span></li>
+            <li><span class="check">✓</span><span>DARs can be stored wherever parties choose</span></li>
+            <li><span class="check">✓</span><span>We sell optional services + SV-DAR capabilities</span></li>
           </ul>
         </div>
       </div>
@@ -564,15 +521,17 @@
       <div class="section-head">
         <div>
           <h2>Code</h2>
-          <p>Choose your path: copy-paste quickstart, canonical spec/schema, or the reference implementation repository.</p>
+          <p>Start in seconds with copy-paste. For production adoption, use the open spec and reference implementation repository.</p>
+        </div>
+        <div class="right">
+          <a class="btn btn-primary" id="githubCode" href="#" target="_blank" rel="noopener">Open Spec & Reference</a>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <span class="pill">Copy-paste quickstart</span>
+          <span class="pill">Copy-paste</span>
           <h3 style="margin-top:10px;">Issue + verify (minimal)</h3>
-          <p class="mini">Keep this one-screen short. It’s about immediacy.</p>
           <div class="codebox" role="region" aria-label="Quickstart pseudo code" style="margin-top:12px;">
 <pre>// Issue a receipt (self-hosted)
 const receipt = issueDAR(payload, privateKey)
@@ -581,56 +540,51 @@ const receipt = issueDAR(payload, privateKey)
 const result = verifyDAR(receipt)
 if (!result.ok) throw new Error(result.reason)</pre>
           </div>
-          <div class="hero-cta" style="margin-top:12px;">
-            <a class="btn" href="#contact">Need a language SDK?</a>
-          </div>
+          <p class="mini" style="margin-top:10px;">Keep this section intentionally small: one screen, immediate value.</p>
         </div>
 
         <div class="card">
-          <span class="pill">Open source + spec</span>
-          <h3 style="margin-top:10px;">Reference implementation</h3>
+          <span class="pill">What the repo contains</span>
+          <h3 style="margin-top:10px;">Minimum viable open source</h3>
           <ul class="list">
-            <li><span class="check">✓</span><span>Schema + versioning policy</span></li>
-            <li><span class="check">✓</span><span>Examples + test vectors</span></li>
-            <li><span class="check">✓</span><span>Reference issue/verify utilities</span></li>
+            <li><span class="check">✓</span><span><strong>spec/</strong> schema + invariants + versioning</span></li>
+            <li><span class="check">✓</span><span><strong>README</strong> overview + principles</span></li>
+            <li><span class="check">✓</span><span><strong>dar-schema.json</strong> canonical structure</span></li>
+            <li><span class="check">✓</span><span>License for reuse</span></li>
           </ul>
-          <p class="mini" style="margin-top:10px;">
-            Replace these placeholders with real links when ready:
-          </p>
-          <div class="hero-cta" style="margin-top:10px;">
-            <a class="btn" href="#contact">GitHub repo (add link)</a>
-            <a class="btn" href="#contact">Spec/Schema (add link)</a>
+          <div class="hero-cta" style="margin-top:12px;">
+            <a class="btn" id="githubRepo2" href="#" target="_blank" rel="noopener">View repo</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PRINCIPLES -->
-  <section class="section" id="principles">
+  <!-- WHY NOW -->
+  <section class="section" id="why">
     <div class="container">
       <div class="section-head">
         <div>
-          <h2>Principles</h2>
-          <p>Neutrality, portability, and independent verification are non-negotiable. SV-DAR strengthens verification where needed.</p>
+          <h2>Why now</h2>
+          <p>As autonomous systems and AI-driven workflows grow, internal logs don’t translate across vendors, customers, and auditors. DAR makes actions portable; SV-DAR strengthens trust when incentives conflict.</p>
         </div>
       </div>
 
       <div class="grid-3">
         <div class="card">
-          <span class="pill">Neutral</span>
-          <h3 style="margin-top:10px;">Receipts don’t judge</h3>
-          <p>DAR proves occurrence, not correctness. Interpretation lives in tools and workflows.</p>
+          <span class="pill">Portability</span>
+          <h3 style="margin-top:10px;">Evidence should travel</h3>
+          <p>When workflows span tools and vendors, a shared proof format reduces ambiguity and friction.</p>
         </div>
         <div class="card">
-          <span class="pill">Portable</span>
-          <h3 style="margin-top:10px;">Stored anywhere</h3>
-          <p>Receipts should outlive systems and vendors. Storage is implementation-agnostic.</p>
+          <span class="pill">Accountability</span>
+          <h3 style="margin-top:10px;">AI decisions need auditability</h3>
+          <p>Receipts make it easier to reconstruct “what happened” without granting special access to internal systems.</p>
         </div>
         <div class="card">
-          <span class="pill">Verifiable</span>
-          <h3 style="margin-top:10px;">Independent checks</h3>
-          <p>Anyone can verify authenticity. SV-DAR adds stronger guarantees in adversarial settings.</p>
+          <span class="pill">Disputes</span>
+          <h3 style="margin-top:10px;">Proof must survive scrutiny</h3>
+          <p>SV-DAR targets the workflows where evidence must remain defensible under dispute and audit.</p>
         </div>
       </div>
     </div>
@@ -642,67 +596,41 @@ if (!result.ok) throw new Error(result.reason)</pre>
       <div class="section-head">
         <div>
           <h2>Pricing</h2>
-          <p>Receipts are free. Services are usage-based. SV-DAR is premium.</p>
+          <p>Keep the foundation open. Monetize the work: verification at scale, chain operations, intelligence, and SV-DAR premium guarantees.</p>
         </div>
       </div>
 
       <div class="grid-3">
         <div class="card">
           <span class="pill">Free</span>
-          <h3 style="margin-top:10px;">DAR foundation</h3>
-          <p>Spec, examples, and self-hosted issuance/verification via open libraries.</p>
+          <div class="price">$0</div>
+          <div class="price-sub">DAR spec + open repo</div>
           <ul class="list">
-            <li><span class="check">✓</span><span>Learn DAR</span></li>
-            <li><span class="check">✓</span><span>Copy-paste quickstart</span></li>
-            <li><span class="check">✓</span><span>Reference implementation (when live)</span></li>
+            <li><span class="check">✓</span><span>Open schema & examples</span></li>
+            <li><span class="check">✓</span><span>Self-hosted usage</span></li>
           </ul>
         </div>
 
         <div class="card">
-          <span class="pill">Usage</span>
-          <h3 style="margin-top:10px;">Tools</h3>
-          <p>Pay per verification, chain traversal unit, and/or intelligence event.</p>
+          <span class="pill">Pro</span>
+          <div class="price">$99/mo</div>
+          <div class="price-sub">Tools (starter)</div>
           <ul class="list">
-            <li><span class="check">✓</span><span>Verification</span></li>
-            <li><span class="check">✓</span><span>Chain operations</span></li>
-            <li><span class="check">✓</span><span>Reporting</span></li>
+            <li><span class="check">✓</span><span>Verification API + batch</span></li>
+            <li><span class="check">✓</span><span>Basic chain operations</span></li>
+            <li><span class="check">✓</span><span>Usage-based overages</span></li>
           </ul>
         </div>
 
         <div class="card">
-          <span class="pill">Premium</span>
-          <h3 style="margin-top:10px;">SV-DAR</h3>
-          <p>Enhanced verification guarantees, enterprise support, and integration for high-stakes workflows.</p>
+          <span class="pill">Enterprise</span>
+          <div class="price">Custom</div>
+          <div class="price-sub">SLAs + SV-DAR</div>
           <ul class="list">
-            <li><span class="check">✓</span><span>Enhanced verification</span></li>
-            <li><span class="check">✓</span><span>Enterprise controls & SLAs</span></li>
-            <li><span class="check">✓</span><span>Integration support</span></li>
+            <li><span class="check">✓</span><span>SV-DAR premium guarantees</span></li>
+            <li><span class="check">✓</span><span>Advanced tooling + reporting</span></li>
+            <li><span class="check">✓</span><span>Support, onboarding, and SLAs</span></li>
           </ul>
-        </div>
-      </div>
-
-      <p class="fineprint" style="margin-top:14px;">
-        Keep unit rates off the homepage until you’re ready. The homepage should communicate fairness and the model, not negotiate price.
-      </p>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="section" id="contact">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>Contact</h2>
-          <p>Tell us your workflow. We’ll recommend where DAR, tools, and SV-DAR create immediate value.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <p class="mini">Replace with your preferred contact method (form / calendly). Placeholder email below.</p>
-        <div class="hero-cta" style="margin-top:12px;">
-          <a class="btn btn-primary" href="mailto:hello@digitalactionreceipts.com">Email: hello@digitalactionreceipts.com</a>
-          <a class="btn btn-green" href="#svdar">SV-DAR</a>
-          <a class="btn" href="#code">Code</a>
         </div>
       </div>
     </div>
@@ -713,32 +641,43 @@ if (!result.ok) throw new Error(result.reason)</pre>
       <div class="footer-grid">
         <div>
           <div class="brand-title">Digital Action Receipts</div>
-          <div class="muted">DAR is open evidence of digital actions. SV-DAR adds self-verifying trust for high-stakes environments. Tools provide optional verification and intelligence at scale.</div>
+          <div class="muted">DAR is open evidence of digital actions. SV-DAR adds self-verifying guarantees. Tools help teams verify and reason over receipts at scale.</div>
         </div>
+
         <div>
-          <div class="brand-title" style="font-size:14px;">Menu</div>
+          <div class="brand-title" style="font-size:14px;">Pages</div>
           <div style="margin-top:8px; display:grid; gap:6px;">
             <a href="#svdar">SV-DAR</a>
             <a href="#tools">Tools</a>
             <a href="#dar">DAR</a>
             <a href="#code">Code</a>
-            <a href="#principles">Principles</a>
+            <a href="#why">Why now</a>
             <a href="#pricing">Pricing</a>
           </div>
         </div>
+
         <div>
-          <div class="brand-title" style="font-size:14px;">Notes</div>
-          <div class="muted" style="margin-top:8px;">
-            DARs are not owned by this site and do not require our permission to exist. We sell optional services and SV-DAR capabilities.
+          <div class="brand-title" style="font-size:14px;">Links</div>
+          <div style="margin-top:8px; display:grid; gap:6px;">
+            <a id="githubFooter" href="#" target="_blank" rel="noopener">GitHub (DAR spec)</a>
+          </div>
+          <div class="muted" style="margin-top:10px;">
+            © <span id="year"></span>
           </div>
         </div>
       </div>
-      <div class="muted" style="margin-top:18px;">© <span id="year"></span> Digital Action Receipts. All rights reserved.</div>
     </div>
   </footer>
 
   <script>
-    // Minimal mobile nav toggle + footer year
+    // Wire GitHub links
+    const links = ["githubTop","githubHero","githubCode","githubRepo2","githubFooter"];
+    links.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.href = GITHUB_URL;
+    });
+
+    // Mobile nav
     const btn = document.getElementById('menuBtn');
     const panel = document.getElementById('menuPanel');
     btn?.addEventListener('click', () => {
@@ -751,6 +690,27 @@ if (!result.ok) throw new Error(result.reason)</pre>
         btn.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    const themeLabel = document.getElementById('themeLabel');
+    const root = document.documentElement;
+
+    function setTheme(t){
+      root.setAttribute('data-theme', t);
+      localStorage.setItem('dar_theme', t);
+      themeLabel.textContent = (t === 'dark') ? 'Light' : 'Dark';
+      themeBtn.setAttribute('aria-label', (t === 'dark') ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    const saved = localStorage.getItem('dar_theme');
+    if (saved === 'dark' || saved === 'light') setTheme(saved);
+
+    themeBtn?.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') || 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
     document.getElementById('year').textContent = String(new Date().getFullYear());
   </script>
 </body>
