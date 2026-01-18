@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tools — Digital Action Receipts (DAR / SV-DAR)</title>
+  <meta name="description" content="Optional tools built around DAR and SV-DAR: verification, timeline traversal, intelligence, and audit-ready reporting. Receipts are free to exist. You pay only when systems do work." />
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#f7f8fa;
+      --text:#0b0f1a;
+      --muted:#5b6476;
+      --line:#e7eaf0;
+      --accent:#0b5cff;
+      --radius:16px;
+      --shadow:0 10px 30px rgba(11,15,26,0.06);
+      --max:1100px;
+    }
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin:0 auto; padding:40px 18px 80px}
+
+    h1{font-size:36px; margin:0 0 10px; letter-spacing:-.02em}
+    .intro{
+      max-width:75ch;
+      color:var(--muted);
+      font-size:16px;
+      margin-bottom:28px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .pill{
+      display:inline-block;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--panel);
+      color:var(--muted);
+      border:1px solid var(--line);
+      margin-bottom:10px;
+    }
+
+    .card h2{
+      margin:0 0 6px;
+      font-size:20px;
+      letter-spacing:-.01em;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      max-width:80ch;
+    }
+
+    .actions{
+      margin-top:14px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:14px;
+      background:#fff;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#fff;
+      font-weight:600;
+    }
+
+    .foot{
+      margin-top:40px;
+      border-top:1px solid var(--line);
+      padding-top:20px;
+      color:var(--muted);
+      font-size:13px;
+      max-width:85ch;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <h1>Tools</h1>
+    <p class="intro">
+      Optional services built around DAR and SV-DAR.
+      Receipts are free to exist and verify independently.
+      You pay only when systems are asked to perform work at scale —
+      such as traversal, analysis, aggregation, or reporting.
+    </p>
+
+    <div class="grid">
+
+      <!-- VERIFICATION -->
+      <section class="card">
+        <span class="pill">Verification</span>
+        <h2>Verify receipts</h2>
+        <p>
+          Independently validate receipt integrity, schema compliance,
+          and cryptographic signatures (when present).
+          Supports single-receipt and batch verification without accounts
+          or issuer access.
+        </p>
+        <div class="actions">
+          <a href="verifier.html" class="btn primary">Open verifier</a>
+        </div>
+      </section>
+
+      <!-- CHAIN OPS -->
+      <section class="card">
+        <span class="pill">Chain operations</span>
+        <h2>Traverse timelines</h2>
+        <p>
+          Analyze receipt chains and graphs to detect gaps,
+          ordering conflicts, broken references, and continuity issues.
+          Designed for dispute resolution, audits, and incident review.
+        </p>
+        <div class="actions">
+          <button class="btn" disabled>Coming soon</button>
+        </div>
+      </section>
+
+      <!-- INTELLIGENCE -->
+      <section class="card">
+        <span class="pill">Intelligence</span>
+        <h2>Reason &amp; report</h2>
+        <p>
+          Generate summaries, detect anomalies, run policy checks,
+          and export audit-ready evidence packages when accountability
+          and defensibility are required.
+        </p>
+        <div class="actions">
+          <button class="btn" disabled>Coming soon</button>
+        </div>
+      </section>
+
+      <!-- FAIRNESS -->
+      <section class="card">
+        <span class="pill">Usage-based</span>
+        <h2>Fairness model</h2>
+        <p>
+          Receipts are free to exist, share, and verify.
+          Fees apply only when our systems perform computation
+          — traversal, aggregation, anchoring, analysis, or reporting —
+          never to access or verify truth.
+        </p>
+      </section>
+
+    </div>
+
+    <div class="foot">
+      <strong>Important:</strong> The verifier is a neutral reference tool.
+      Any party may implement a conforming verifier that produces the same
+      results. Digital Action Receipts are designed to remain verifiable
+      even if this site or its operators are unavailable.
+    </div>
+
+  </div>
+</body>
+</html>
